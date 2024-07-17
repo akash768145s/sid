@@ -1,21 +1,21 @@
 'use client'
-import {UploadDropzone } from "@/utils/uploadthing";
+import { UploadDropzone } from "@/utils/uploadthing";
 import Image from "next/image";
 import React, { useState } from 'react'
 
 const UploadButton = () => {
-    const [imageUrl,setImageUrl]=useState<string>('');
+    const [imageUrl, setImageUrl] = useState<string>('');
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <UploadDropzone
-            appearance={{
-                container:{
-                    border:'1px solid blue'
-                },
-                uploadIcon:{
-                    color:'blue'
-                }
-            }}
+                appearance={{
+                    container: {
+                        border: '1px solid blue'
+                    },
+                    uploadIcon: {
+                        color: 'blue'
+                    }
+                }}
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
                     // Do something with the response
@@ -27,9 +27,9 @@ const UploadButton = () => {
                     alert(`ERROR! ${error.message}`);
                 }}
             />
-            {imageUrl.length ?(<div>
-                <Image src={imageUrl} alt='mi image' width={500} height={300}/>
-            </div>):null}
+            {imageUrl.length ? (<div>
+                <Image src={imageUrl} alt='mi image' width={500} height={300} />
+            </div>) : null}
         </main>)
 }
 

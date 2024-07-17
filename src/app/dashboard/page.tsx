@@ -1,7 +1,7 @@
 import React from "react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import LogoutButton from "@/components/logout"; // Import the client component
+import LogoutButton from "@/components/logout"; 
 import UploadButton from "@/components/uploadButton";
 
 
