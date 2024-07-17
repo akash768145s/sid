@@ -1,6 +1,9 @@
 import React from "react";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import LogoutButton from "@/components/logout"; // Import the client component
+import UploadButton from "@/components/uploadButton";
+
 
 const Dashboard = async () => {
   const session = await getServerSession();
@@ -9,7 +12,12 @@ const Dashboard = async () => {
   }
   return (
     <div className="flex min-h-screen flex-col items-center justify-between p-24">
-      Dashboard
+      <div>Dashboard</div>
+      <UploadButton/>
+      <div>
+        {session.user?.email}
+        <LogoutButton /> {/* Render the logout button here */}
+      </div>
     </div>
   );
 };

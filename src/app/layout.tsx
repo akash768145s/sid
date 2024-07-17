@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import "./globals.css";
+import "@uploadthing/react/styles.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { getServerSession } from "next-auth";
@@ -22,8 +23,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider session={session}>
-          <div className="mx-auto max-w-5xl text-2xl gap-2 mb-10">
-            <Navbar />
+          <div className="mx-auto  text-2xl gap-2 mb-10">
             {children}
           </div>
         </SessionProvider>
