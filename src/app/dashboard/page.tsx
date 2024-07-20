@@ -1,25 +1,27 @@
-import React from "react";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import LogoutButton from "@/components/logout"; 
-import UploadButton from "@/components/uploadButton";
+'use client';
+import Button from "@/components/button2";
+import Navbar from "@/app/dashboard/navbar";
+import Navbar2 from "@/app/dashboard/navbar2";
 
-
-const Dashboard = async () => {
-  const session = await getServerSession();
-  if (!session) {
-    redirect("/");
-  }
+const DashboardPage = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div>Dashboard</div>
-      <UploadButton/>
-      <div>
-        {session.user?.email}
-        <LogoutButton /> {/* Render the logout button here */}
-      </div>
-    </div>
-  );
-};
+    <>
+  <Navbar/>
+  <Navbar2/>
 
-export default Dashboard;
+    </>
+  );
+}
+
+export default DashboardPage;
+
+
+{/* <div className="grid grid-cols-auto gap-4 p-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gridAutoRows: '120px' }}>
+<div className="bg-[#004AAD] h-30 w-30 rounded-lg"></div>
+<div className="bg-[#004AAD] h-30 w-30 rounded-lg"></div>
+<div className="bg-[#004AAD] h-30 w-30 rounded-lg"></div>
+<div className="bg-[#004AAD] h-30 w-30 rounded-lg"></div>
+<div className="bg-[#004AAD] h-30 w-30 rounded-lg"></div>
+<div className="bg-[#004AAD] h-30 w-30 rounded-lg"></div>
+
+</div> */}

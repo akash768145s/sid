@@ -22,7 +22,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider>
-          <Navbar />
           <div className="mx-auto text-2xl gap-2 mb-10">
             {children}
           </div>
