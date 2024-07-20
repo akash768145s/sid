@@ -1,7 +1,15 @@
-'use client'
+'use client';
 import { UploadDropzone } from "@/utils/uploadthing";
 import Image from "next/image";
 import React, { useState } from 'react';
+
+// Define the available categories
+const categories = [
+    'Stationary',
+    'Sport Equipment',
+    'Electronics',
+    'Other Accessories'
+];
 
 const UploadButton = () => {
     const [imageUrl, setImageUrl] = useState<string>('');
@@ -12,10 +20,12 @@ const UploadButton = () => {
         category: ''
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // Handle input changes for text fields
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // Handle form submission
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -86,15 +96,20 @@ const UploadButton = () => {
                     required
                     className="border p-2"
                 />
-                <input
-                    type="text"
+                <select
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
-                    placeholder="Product Category"
                     required
                     className="border p-2"
-                />
+                >
+                    <option value="" disabled>Select Category</option>
+                    {categories.map((category) => (
+                        <option key={category} value={category}>
+                            {category}
+                        </option>
+                    ))}
+                </select>
                 <button type="submit" className="bg-blue-500 text-white p-2 rounded">
                     Submit
                 </button>
