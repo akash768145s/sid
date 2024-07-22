@@ -1,4 +1,3 @@
-// src/app/display/page.jsx
 import React from "react";
 import connect from "@/utils/db";
 import Product from "@/models/Product";

@@ -19,6 +19,7 @@
     "next-auth": "^4.24.7",
     "react": "latest",
     "react-dom": "latest",
+    "react-icons": "^5.2.1",
     "styled-components": "^6.1.11",
     "uploadthing": "^6.13.2"
   },

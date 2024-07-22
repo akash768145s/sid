@@ -1,14 +1,13 @@
 'use client';
-import Button from "@/components/button2";
 import Navbar from "@/app/dashboard/navbar";
 import Navbar2 from "@/app/dashboard/navbar2";
-
+import Footer from "@/app/dashboard/footer";
 const DashboardPage = () => {
   return (
     <>
-  <Navbar/>
-  <Navbar2/>
-
+      <Navbar />
+      <Navbar2 />
+      <Footer />
     </>
   );
 }

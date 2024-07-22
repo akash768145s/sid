@@ -1,4 +1,5 @@
 'use client';
+
 import { UploadDropzone } from "@/utils/uploadthing";
 import Image from "next/image";
 import React, { useState } from 'react';
@@ -12,7 +13,7 @@ const categories = [
 ];
 
 const UploadButton = () => {
-    const [imageUrl, setImageUrl] = useState<string>('');
+    const [imageUrl, setImageUrl] = useState('');
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -20,27 +21,41 @@ const UploadButton = () => {
         category: ''
     });
 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
     // Handle input changes for text fields
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleChange = (e: { target: { name: any; value: any; }; }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     // Handle form submission
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
 
-        const response = await fetch('/api/products', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ ...formData, imageUrl })
-        });
+        try {
+            const response = await fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ...formData, imageUrl })
+            });
 
-        if (response.ok) {
-            alert('Product created successfully');
-        } else {
-            alert('Error creating product');
+            if (response.ok) {
+                alert('Product created successfully');
+                setFormData({ name: '', description: '', price: '', category: '' });
+                setImageUrl('');
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message || 'Error creating product');
+            }
+        } catch (err) {
+            setError('Error creating product');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -60,16 +75,17 @@ const UploadButton = () => {
                     console.log("Files: ", res);
                     setImageUrl(res[0].url);
                 }}
-                onUploadError={(error: Error) => {
+                onUploadError={(error) => {
                     alert(`ERROR! ${error.message}`);
                 }}
             />
             {imageUrl.length ? (
-                <div>
+                <div className="my-4">
                     <Image src={imageUrl} alt='Uploaded Image' width={500} height={300} />
                 </div>
             ) : null}
-            <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+            <form onSubmit={handleSubmit} className="flex flex-col space-y-4 w-full max-w-md">
+                {error && <p className="text-red-500">{error}</p>}
                 <input
                     type="text"
                     name="name"
@@ -110,8 +126,8 @@ const UploadButton = () => {
                         </option>
                     ))}
                 </select>
-                <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-                    Submit
+                <button type="submit" className="bg-blue-500 text-white p-2 rounded" disabled={loading}>
+                    {loading ? 'Submitting...' : 'Submit'}
                 </button>
             </form>
         </main>
