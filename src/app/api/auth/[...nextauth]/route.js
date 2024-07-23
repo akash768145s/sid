@@ -1,4 +1,3 @@
-// src/app/api/auth/[...nextauth]/route.js
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -19,8 +18,9 @@ export const authOptions = {
       return session;
     },
     async signIn({ user }) {
-      // Ensure that the user object has the email property
-      if (user.email && user.email.endsWith("@ssn.edu.in")) {
+      const adminEmail = process.env.NEXTAUTH_ADMIN_EMAIL;
+      // Allow sign-in if the user has the admin email or an email ending with @ssn.edu.in
+      if (user.email === adminEmail || user.email.endsWith("@ssn.edu.in")) {
         return true;
       } else {
         return false;
