@@ -3,6 +3,7 @@
 import { UploadDropzone } from "@/utils/uploadthing";
 import Image from "next/image";
 import React, { useState } from 'react';
+import { useSession } from "next-auth/react";
 
 // Define the available categories
 const categories = [
@@ -23,14 +24,15 @@ const UploadButton = () => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const { data: session } = useSession();
 
     // Handle input changes for text fields
-    const handleChange = (e: { target: { name: any; value: any; }; }) => {
+    const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
     // Handle form submission
-    const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError('');
@@ -41,7 +43,7 @@ const UploadButton = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ ...formData, imageUrl })
+                body: JSON.stringify({ ...formData, imageUrl, sellerName: session?.user?.name || 'Unknown Seller' })
             });
 
             if (response.ok) {

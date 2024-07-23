@@ -25,6 +25,10 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    sellerName: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
-import Image from "next/image"; // For optimized images
+import Image from "next/image"; 
 import ProductCard from "@/components/priceCard";
 export default function HomePage() {
   const { data: session } = useSession();
