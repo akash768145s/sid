@@ -1,19 +1,20 @@
-// src/components/ProductList.js
-'use client';
-import React, { useState } from 'react';
-import Image from 'next/image';
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+import { useSession } from "next-auth/react";
 
 const categories = [
-  'All',
-  'Stationary',
-  'Sport Equipment',
-  'Electronics',
-  'Other Accessories',
+  "All",
+  "Stationary",
+  "Sport Equipment",
+  "Electronics",
+  "Other Accessories",
 ];
 
 const ProductList = ({ products }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const { data: session } = useSession();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [productList, setProductList] = useState(products);
 
   const handleSearchChange = (event) => {
@@ -26,12 +27,8 @@ const ProductList = ({ products }) => {
 
   const handleDeleteProduct = async (id) => {
     try {
-      const response = await fetch('/api/products', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id }),
+      const response = await fetch(`/api/products/${id}`, {
+        method: "DELETE",
       });
 
       if (response.ok) {
@@ -39,10 +36,11 @@ const ProductList = ({ products }) => {
           prevList.filter((product) => product._id !== id)
         );
       } else {
-        console.error('Failed to delete product:', await response.json());
+        const errorData = await response.json();
+        console.error("Failed to delete product:", errorData.message);
       }
     } catch (error) {
-      console.error('Error deleting product:', error);
+      console.error("Error deleting product:", error);
     }
   };
 
@@ -51,7 +49,7 @@ const ProductList = ({ products }) => {
       .toLowerCase()
       .includes(searchQuery.toLowerCase());
     const matchesCategory =
-      selectedCategory === 'All' || product.category === selectedCategory;
+      selectedCategory === "All" || product.category === selectedCategory;
 
     return matchesSearch && matchesCategory;
   });
@@ -93,12 +91,14 @@ const ProductList = ({ products }) => {
               <p>₹{product.price}</p>
               <p>{product.category}</p>
               <p>Seller: {product.sellerName}</p> {/* Display sellerName */}
-              <button
-                onClick={() => handleDeleteProduct(product._id)}
-                className="mt-2 p-2 bg-red-500 text-white rounded"
-              >
-                Delete
-              </button>
+              {session?.user?.name === product.sellerName && (
+                <button
+                  onClick={() => handleDeleteProduct(product._id)}
+                  className="mt-2 p-2 bg-red-500 text-white rounded"
+                >
+                  Delete
+                </button>
+              )}
             </div>
           ))
         ) : (
