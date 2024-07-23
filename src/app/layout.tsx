@@ -1,5 +1,4 @@
-// src/app/layout.js
-import Navbar from "@/components/Navbar";
+// src/app/layout.j
 import "./globals.css";
 import "@uploadthing/react/styles.css";
 import type { Metadata } from "next";

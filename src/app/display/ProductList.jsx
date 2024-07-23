@@ -100,6 +100,7 @@ const ProductList = ({ products }) => {
                 Delete
               </button>
             </div>
+           
           ))
         ) : (
           <p>No products found.</p>

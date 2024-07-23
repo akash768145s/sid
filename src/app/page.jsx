@@ -2,7 +2,7 @@
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image"; // For optimized images
-
+import ProductCard from "@/components/priceCard";
 export default function HomePage() {
   const { data: session } = useSession();
 
@@ -10,12 +10,11 @@ export default function HomePage() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
       <h1 className="text-3xl font-bold mb-4">Welcome to My App</h1>
       {session ? (
-        <div className="text-center">
+        <><div className="text-center">
           <img
             src={session.user.image}
             alt="Profile Picture"
-            className="w-24 h-24 rounded-full mb-4"
-          />
+            className="w-24 h-24 rounded-full mb-4" />
           <p className="text-xl font-semibold">
             Profile Name: {session.user.name}
           </p>
@@ -28,7 +27,7 @@ export default function HomePage() {
           >
             Sign out
           </button>
-        </div>
+        </div><ProductCard /></>
       ) : (
         <div className="text-center">
           <p className="text-xl font-semibold mb-4">Not signed in</p>
