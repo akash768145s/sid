@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -17,6 +17,7 @@ const ProductList = ({ products }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [productList, setProductList] = useState(products);
   const [isMounted, setIsMounted] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     setIsMounted(true);
@@ -53,6 +54,48 @@ const ProductList = ({ products }) => {
     }
   };
 
+  const handleAddToWishlist = async (product) => {
+    try {
+      const response = await fetch("/api/wishlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ product }),
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok) {
+        setMessage(responseData.message);
+      } else {
+        setMessage(responseData.message);
+      }
+    } catch (error) {
+      console.error("Error adding product to wishlist:", error);
+      setMessage("Error adding product to wishlist.");
+    }
+  };
+const handleRemoveFromWishlist = async (productId) => {
+  try {
+    const response = await fetch(`/api/wishlist/${productId}`, {
+      method: 'DELETE',
+    });
+
+    const responseData = await response.json();
+
+    if (response.ok) {
+      setMessage(responseData.message);
+      // Update UI to remove the product from the wishlist
+    } else {
+      setMessage(responseData.message);
+    }
+  } catch (error) {
+    console.error('Error removing product from wishlist:', error);
+    setMessage('Error removing product from wishlist.');
+  }
+};
+
   const filteredProducts = productList.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
@@ -69,6 +112,7 @@ const ProductList = ({ products }) => {
 
   return (
     <div>
+      {message && <div className="alert">{message}</div>}
       <div className="mb-4 flex flex-col md:flex-row gap-4">
         <input
           type="text"
@@ -115,6 +159,12 @@ const ProductList = ({ products }) => {
                     Delete
                   </button>
                 )}
+                <button
+                  onClick={() => handleAddToWishlist(product)}
+                  className="mt-2 p-2 bg-blue-500 text-white rounded"
+                >
+                  Add to Wishlist
+                </button>
               </div>
             );
           })

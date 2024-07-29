@@ -36,7 +36,7 @@ export default function HomePage() {
             className="flex items-center px-6 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 transition"
           >
             <Image
-              src="/google-logo.svg"
+              src="/google.svg"
               alt="Google Logo"
               width={24}
               height={24}
