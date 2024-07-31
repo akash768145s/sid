@@ -1,4 +1,3 @@
-// src/app/wishlist/page.js
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -39,10 +38,7 @@ const WishlistPage = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error(
-          "Error removing product from wishlist:",
-          errorData.message
-        );
+        console.error("Error removing product from wishlist:", errorData.message);
         return;
       }
 

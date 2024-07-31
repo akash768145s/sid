@@ -1,3 +1,5 @@
+// src/app/api/products/[id]/route.js
+
 import { NextResponse } from 'next/server';
 import connect from '@/utils/db';
 import Product from '@/models/Product';

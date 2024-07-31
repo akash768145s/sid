@@ -1,5 +1,4 @@
 
-
 import { getServerSession } from 'next-auth/next';
 import connect from '../../../utils/db';
 import Wishlist from '../../../models/Wishlist';
