@@ -76,25 +76,26 @@ const ProductList = ({ products }) => {
       setMessage("Error adding product to wishlist.");
     }
   };
-const handleRemoveFromWishlist = async (productId) => {
-  try {
-    const response = await fetch(`/api/wishlist/${productId}`, {
-      method: 'DELETE',
-    });
 
-    const responseData = await response.json();
+  const handleRemoveFromWishlist = async (productId) => {
+    try {
+      const response = await fetch(`/api/wishlist/${productId}`, {
+        method: 'DELETE',
+      });
 
-    if (response.ok) {
-      setMessage(responseData.message);
-      // Update UI to remove the product from the wishlist
-    } else {
-      setMessage(responseData.message);
+      const responseData = await response.json();
+
+      if (response.ok) {
+        setMessage(responseData.message);
+        // Update UI to remove the product from the wishlist
+      } else {
+        setMessage(responseData.message);
+      }
+    } catch (error) {
+      console.error('Error removing product from wishlist:', error);
+      setMessage('Error removing product from wishlist.');
     }
-  } catch (error) {
-    console.error('Error removing product from wishlist:', error);
-    setMessage('Error removing product from wishlist.');
-  }
-};
+  };
 
   const filteredProducts = productList.filter((product) => {
     const matchesSearch = product.name
@@ -135,39 +136,37 @@ const handleRemoveFromWishlist = async (productId) => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => {
-            return (
-              <div key={product._id} className="border p-4">
-                <Image
-                  src={product.imageUrl}
-                  alt={product.name}
-                  width={500}
-                  height={300}
-                />
-                <h2 className="text-xl font-bold">{product.name}</h2>
-                <p>{product.description}</p>
-                <p>₹{product.price}</p>
-                <p>{product.category}</p>
-                <p>Seller: {product.sellerName}</p>
-                {(session?.user?.name === product.sellerName ||
-                  session?.user?.email ===
-                  "sakthimuruganakash@gmail.com") && (
-                  <button
-                    onClick={() => handleDeleteProduct(product._id)}
-                    className="mt-2 p-2 bg-red-500 text-white rounded"
-                  >
-                    Delete
-                  </button>
-                )}
+          filteredProducts.map((product) => (
+            <div key={product._id} className="border p-4">
+              <Image
+                src={product.imageUrl}
+                alt={product.name}
+                width={500}
+                height={300}
+              />
+              <h2 className="text-xl font-bold">{product.name}</h2>
+              <p>{product.description}</p>
+              <p>₹{product.price}</p>
+              <p>{product.category}</p>
+              <p>Seller: {product.sellerName}</p>
+              <p>Seller Email: {product.sellerEmail}</p> {/* Display sellerEmail */}
+              {(session?.user?.name === product.sellerName ||
+                session?.user?.email === "sakthimuruganakash@gmail.com") && (
                 <button
-                  onClick={() => handleAddToWishlist(product)}
-                  className="mt-2 p-2 bg-blue-500 text-white rounded"
+                  onClick={() => handleDeleteProduct(product._id)}
+                  className="mt-2 p-2 bg-red-500 text-white rounded"
                 >
-                  Add to Wishlist
+                  Delete
                 </button>
-              </div>
-            );
-          })
+              )}
+              <button
+                onClick={() => handleAddToWishlist(product)}
+                className="mt-2 p-2 bg-blue-500 text-white rounded"
+              >
+                Add to Wishlist
+              </button>
+            </div>
+          ))
         ) : (
           <p>No products found.</p>
         )}

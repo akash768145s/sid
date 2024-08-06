@@ -48,6 +48,7 @@ const config: Config = {
         raw: "screen and (max-width: 450px)",
       },
     },
+    
   },
 
   plugins: [],

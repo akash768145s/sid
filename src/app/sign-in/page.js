@@ -1,52 +1,62 @@
 "use client";
+import React from "react";
+import GoogleButton from "@/components/GoogleButton"; // Adjust the import path if necessary
+import { useSession, signOut } from "next-auth/react";
+import ProductCard from "@/components/priceCard";
+import Image from "next/image";
 
-import { useSession, signIn, signOut } from "next-auth/react";
-import Image from "next/image"; // For optimized images
-
-export default function HomePage() {
+const HomePage = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold mb-4">Welcome to My App</h1>
+    <div
+      className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center p-4"
+      style={{ backgroundImage: 'url("/sign-in.png")' }} // Update the path to your image
+    >
       {session ? (
-        <div className="text-center">
-          <img
-            src={session.user.image}
-            alt="Profile Picture"
-            className="w-24 h-24 rounded-full mb-4"
-          />
-          <p className="text-xl font-semibold">
-            Profile Name: {session.user.name}
-          </p>
-          <p className="text-lg text-gray-700">
-            Digital ID: {session.user.digitalId}
-          </p>
-          <button
-            onClick={() => signOut()}
-            className="mt-4 px-6 py-2 bg-red-600 text-white font-bold rounded hover:bg-red-700 transition"
-          >
-            Sign out
-          </button>
-        </div>
+        <>
+          <div className="text-center">
+            <img
+              src={session.user.image}
+              alt="Profile Picture"
+              className="w-24 h-24 rounded-full mb-4"
+            />
+            <p className="text-xl font-semibold">
+              Profile Name: {session.user.name}
+            </p>
+            <p className="text-lg text-gray-700">
+              Digital ID: {session.user.digitalId}
+            </p>
+            <button
+              onClick={() => signOut()}
+              className="mt-4 px-6 py-2 bg-red-600 text-white font-bold rounded hover:bg-red-700 transition"
+            >
+              Sign out
+            </button>
+          </div>
+          <ProductCard />
+        </>
       ) : (
         <div className="text-center">
-          <p className="text-xl font-semibold mb-4">Not signed in</p>
-          <button
-            onClick={() => signIn("google")}
-            className="flex items-center px-6 py-2 bg-blue-600 text-white font-bold rounded hover:bg-blue-700 transition"
+          <Image
+            src="/Logo2.png" // Update the path to your logo image
+            alt="Logo"
+            width={175} // Set the desired width
+            height={175} // Set the desired height
+            className="mb-4"
+            style={{ marginLeft: "20px" }} // Adjust the margin to move the image to the right
+          />
+          <h1
+            className="font-semibold text-white mb-2"
+            style={{ fontSize: "2rem", marginTop: "-35px" }} // Move the tagline up slightly
           >
-            <Image
-              src="/google-logo.svg"
-              alt="Google Logo"
-              width={24}
-              height={24}
-              className="mr-2"
-            />
-            Sign in with Google
-          </button>
+            Sell it Dude!
+          </h1>
+          <GoogleButton />
         </div>
       )}
     </div>
   );
-}
+};
+
+export default HomePage;

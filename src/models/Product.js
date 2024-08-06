@@ -29,6 +29,10 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    sellerEmail: {
+      type: String,
+      required: true,  // Ensure that sellerEmail is always provided
+    },
   },
   { timestamps: true }
 );

@@ -1,31 +1,45 @@
-// src/app/layout.j
+"use client";
+
 import "./globals.css";
 import "@uploadthing/react/styles.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import SessionProvider from "@/utils/SessionProvider";
+import { Oswald } from "next/font/google";
+import { SessionProvider } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Oswald({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: "SID",
-  description: "Sell IT DUDE",
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <SessionProvider>
-          <div className="mx-auto text-2xl gap-2 mb-10">
-            {children}
-          </div>
+          <AppWrapper>{children}</AppWrapper>
         </SessionProvider>
       </body>
     </html>
   );
+}
+
+function AppWrapper({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const pathname = usePathname(); // Get the current pathname
+
+  useEffect(() => {
+    if (status === "unauthenticated" && pathname !== "/sign-in") {
+      router.push("/sign-in");
+    }
+  }, [status, router, pathname]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (status === "unauthenticated" && pathname !== "/sign-in") {
+    return null; // Or you can show a loading spinner or a placeholder
+  }
+
+  return <div className="mx-auto text-2xl gap-2 mb-10">{children}</div>;
 }
