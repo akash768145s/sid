@@ -6,10 +6,9 @@ import stationaryIcon from "../../../public/Book.png";
 import sportsIcon from "../../../public/Badminton.png";
 import electronicsIcon from "../../../public/Multiple Devices.png";
 import accessoriesIcon from "../../../public/Shopping Bag.png";
-import inboxIcon from "../../../public/Letter.png";
 import profileIcon from "../../../public/Person.png";
-import CImage from "../../../public/Carousal image.png";
-import Button from "@/components/button2";
+import CImage from "../../../public/Girl-Img.png";
+
 import Home from "../../../public/Home.png";
 
 // NavItem Component
@@ -56,36 +55,41 @@ const Navbar2 = () => {
 
   return (
     <>
+
+    
       <nav
         className={`${isFixed ? "fixed" : "relative"
           } top-0 left-0 w-full z-1000 transition-all bg-white h-20 flex items-center justify-between px-4 ${isFixed ? "shadow-md" : ""
           }`}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6.5rem' }}> {/* Increased gap to 5rem */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '7rem' }}> {/* Increased gap to 5rem */}
           <NavItem href="/" title="Home" icon={Home} iconSize={40} />
           <NavItem href="/stationary" title="Stationary" icon={stationaryIcon} iconSize={35} />
           <NavItem href="/sports-equipment" title="Sports Equipment" icon={sportsIcon} iconSize={45} />
-          <NavItem href="/electronics" title="Electronics" icon={electronicsIcon} iconSize={50} />
-          <NavItem href="/other-accessories" title="Other Accessories" icon={accessoriesIcon} iconSize={40} />
-          <NavItem href="/inbox" title="Inbox" icon={inboxIcon} iconSize={40} />
-          <NavItem href="/profile" title="Profile" icon={profileIcon} iconSize={40} />
+          <NavItem href="/electronics" title="Electronics" icon={electronicsIcon} iconSize={35} />
+          <NavItem href="/other-accessories" title="Other Accessories" icon={accessoriesIcon} iconSize={60} />
+          
+          <NavItem href="/Profile" title="Profile" icon={profileIcon} iconSize={40} />
         </div>
       </nav>
 
-      <div
-        className={`relative text-center mt-${isFixed ? "20" : "0"}`}
-      >
+
+      <div className={`relative text-center mt-${isFixed ? "20" : "0"}`}>
+        <div style={{ position: 'absolute', top: '1.5rem', right: '10rem', color: '#004aad', textAlign: 'right', padding: '1rem' }}>
+          <h2 style={{ fontSize: '3rem', fontWeight: 'bold' }}>Got Stuff? Get Cash!</h2>
+          <p style={{ fontSize: '2rem',fontWeight: 'lighter' }}>TURN YOUR EXTRAS INTO EXTRA CASH</p>
+        </div>
         <Image
           src={CImage}
           alt="Carousal Image"
-          width={1600}
-          height={414}
+          width={741}
+          height={442}
           style={{ maxWidth: "100%" }}
         />
-        <div className="absolute top-3/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <Button />
-        </div>
+
       </div>
+     
+
     </>
   );
 };

@@ -14,7 +14,7 @@ const Profile = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsReady(true);
-    }, 1000); // 1 second delay
+    }, 1000); 
 
     return () => clearTimeout(timer);
   }, []);

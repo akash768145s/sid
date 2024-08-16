@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import GoogleButton from "@/components/GoogleButton"; // Adjust the import path if necessary
+import GoogleButton from "@/components/GoogleButton"; 
 import { useSession, signOut } from "next-auth/react";
 import ProductCard from "@/components/priceCard";
 import Image from "next/image";

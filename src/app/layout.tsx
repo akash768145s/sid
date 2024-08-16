@@ -8,11 +8,13 @@ import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 
+
 const inter = Oswald({ subsets: ["latin"] });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+
       <body className={inter.className}>
         <SessionProvider>
           <AppWrapper>{children}</AppWrapper>

@@ -1,12 +1,8 @@
 "use client";
-import SearchInput from "@/components/searchbar";
 import Image from "next/image";
-import phoneIcon from "../../../public/sign-out.png";
-import { signOut, useSession } from "next-auth/react";
-
+import phoneIcon from "../../../public/wishli.png";
+import backIcon from "../../../public/ba.png";
 const Navbar = () => {
-  const { data: session } = useSession();
-
   return (
     <>
       <style jsx>{`
@@ -78,25 +74,18 @@ const Navbar = () => {
       `}</style>
 
       <nav className="navbar">
-        {/* Logo */}
-        <div className="logoContainer">
+        <button className="contactButton">
           <Image
-            src="/logo.png"
-            alt="Logo"
-            width={89}
-            height={79}
-            className="logo"
+            src={backIcon}
+            alt="Phone"
+            width={10}
+            height={10}
+            className="mr-2"
           />
-          <h1 className="title">Sell it Dude!</h1>
-        </div>
-
-        {/* Navigation Links */}
+          Back
+        </button>
         <div className="navButtons">
-          <SearchInput />
-          <button
-            className="contactButton"
-            onClick={() => (session ? signOut() : alert("Contact Us"))}
-          >
+          <button className="contactButton">
             <Image
               src={phoneIcon}
               alt="Phone"
@@ -104,7 +93,7 @@ const Navbar = () => {
               height={30}
               className="mr-2"
             />
-            {session ? "Sign Out" : "Contact Us"}
+            Wishlist
           </button>
         </div>
       </nav>
@@ -113,5 +102,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
