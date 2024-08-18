@@ -1,7 +1,7 @@
 "use client";
 import Navbar from "@/components/Main/navbar";
 import Navbar2 from "../components/Main/pNavbar/pNav";
-import Footer from "@/components/Footer/footer";
+import Footer from "../components/Main/Footer/footer";
 import Hero from "../components/Main/Hero/Hero";
 const Home = () => {
   return (

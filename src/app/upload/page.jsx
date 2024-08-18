@@ -11,8 +11,6 @@ import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import backIcon from "../../../public/ba.png";
 
-
-
 const categories = [
   "Stationary",
   "Sport Equipment",
@@ -21,10 +19,6 @@ const categories = [
 ];
 
 const UploadButton = () => {
-
-  const handleClick = () => {
-    router.push("/"); // Navigate to the home page
-  };
   const [imageUrl, setImageUrl] = useState("");
   const [formData, setFormData] = useState({
     name: "",
@@ -38,12 +32,27 @@ const UploadButton = () => {
   const router = useRouter();
   const { toast } = useToast();
 
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     if (status === "loading") return;
     if (!session) {
       router.push("/sign-in");
     }
   }, [session, status, router]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 600);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Check the initial window size
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     const preventScrolling = () => {
@@ -126,7 +135,7 @@ const UploadButton = () => {
       <style jsx>{`
         .contactButton {
           position: fixed;
-          top: 1rem;
+          top: 1.1rem;
           left: 1rem;
           display: flex;
           align-items: center;
@@ -152,36 +161,45 @@ const UploadButton = () => {
           border-bottom: 1px solid #004aad;
         }
 
-        @media (max-width: 767px) {
-          .title {
-            display: none;
-          }
+        .form-container {
+          background-color: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+          padding: 20px;
+          max-width: 400px;
+          width: 100%;
+        }
 
+        .lottie-container {
+          width: 300px;
+          height: 300px;
+        }
+
+        @media (max-width: 767px) {
           .contactButton {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
+            display: flex;
           }
-        }
-        @media only screen and (max-width: 600px) {
+
           .form-container {
-            max-width: 90%;
-            width: 100%;
-            padding: 16px;
+            max-width: 150%; /* Increased width for mobile */
+            width: 150%;
+            padding: 20px;
             margin: 0 auto;
+            margin-top: 20px; /* Adjusted for mobile */
+            margin-left: -55px;
           }
-          .flex {
-            flex-direction: column;
-            align-items: center;
-          }
+
           .lottie-container {
-            width: 250px;
-            height: 250px;
-          }
-          .lottie-container:last-child {
+            width: 100%;
+            height: auto;
             margin-top: 0;
           }
         }
       `}</style>
+
       <main
         className="flex min-h-screen flex-col items-center justify-between p-24 bg-cover bg-center overflow-hidden"
         style={{
@@ -190,7 +208,7 @@ const UploadButton = () => {
           backgroundPosition: "center",
         }}
       >
-        <button className="contactButton" onClick={handleClick}>
+        <button className="contactButton" onClick={() => router.push("/")}>
           <Image
             src={backIcon}
             alt="Back"
@@ -200,115 +218,205 @@ const UploadButton = () => {
           />
           Back
         </button>
-        <div className="flex justify-between w-full items-center">
-          <Lottie
-            animationData={animationData}
-            loop={true}
-            autoplay={true}
-            style={{ width: 300, height: 300 }}
-          />
-          <form
-            onSubmit={handleSubmit}
-            className="form-container flex flex-col space-y-4 p-6 rounded-md shadow-md mx-4"
-            style={{
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
-              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
-            }}
-          >
-            {error && <p className="text-red-500">{error}</p>}
-            <UploadDropzone
-              appearance={{
-                container: {
-                  border: "1px solid blue",
-                },
-                uploadIcon: {
-                  color: "blue",
-                },
-              }}
-              endpoint="imageUploader"
-              onClientUploadComplete={(res) => {
-                setImageUrl(res[0].url);
-              }}
-              onUploadError={(error) => {
-                toast({
-                  title: "Upload Error",
-                  description: `ERROR! ${error.message}`,
-                  variant: "destructive",
-                });
-              }}
-            />
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Product Name"
-              required
-              className="border p-2"
-            />
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Product Description"
-              required
-              className="border p-2"
-            />
-            <input
-              type="number"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              placeholder="Product Price"
-              required
-              className="border p-2"
-            />
-            <select
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-              className="border p-2"
+        {isMobile ? (
+          <div className="flex flex-col items-center w-full">
+            <form
+              onSubmit={handleSubmit}
+              className="form-container flex flex-col space-y-4 rounded-md shadow-md"
             >
-              <option value="" disabled>
-                Select Category
-              </option>
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+              {error && <p className="text-red-500">{error}</p>}
+              <UploadDropzone
+                appearance={{
+                  container: {
+                    border: "1px solid blue",
+                  },
+                  uploadIcon: {
+                    color: "blue",
+                  },
+                }}
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  setImageUrl(res[0].url);
+                }}
+                onUploadError={(error) => {
+                  toast({
+                    title: "Upload Error",
+                    description: `ERROR! ${error.message}`,
+                    variant: "destructive",
+                  });
+                }}
+              />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Product Name"
+                required
+                className="border p-2"
+              />
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Product Description"
+                required
+                className="border p-2"
+              />
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="Product Price"
+                required
+                className="border p-2"
+              />
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                className="border p-2"
+              >
+                <option value="" disabled>
+                  Select Category
                 </option>
-              ))}
-            </select>
-            <button
-              type="submit"
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="submit"
+                style={{
+                  background: "#004AAD",
+                  color: "white",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "none",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                }}
+                disabled={loading}
+              >
+                {loading ? "Submitting..." : "Submit"}
+              </button>
+            </form>
+          </div>
+        ) : (
+          <div className="flex justify-between w-full items-center">
+            <Lottie
+              animationData={animationData}
+              loop={true}
+              autoplay={true}
+              style={{ width: 300, height: 300 }}
+            />
+            <form
+              onSubmit={handleSubmit}
+              className="form-container flex flex-col space-y-4 p-6 rounded-md shadow-md mx-4"
               style={{
-                background: "#004AAD",
-                color: "white",
-                padding: "10px",
-                borderRadius: "5px",
-                border: "none",
-                fontSize: "16px",
-                cursor: "pointer",
+                backgroundColor: "rgba(255, 255, 255, 0.1)",
+                backdropFilter: "blur(20px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+                marginTop: "-80px",
               }}
-              disabled={loading}
             >
-              {loading ? "Submitting..." : "Submit"}
-            </button>
-          </form>
-          <Lottie 
-            animationData={animationData1}
-            loop={true}
-            autoplay={true}
-            style={{
-              width: 320,
-              height: 320,
-              marginTop: -250,
-              marginRight: 20,
-            }}
-          />
-        </div>
+              {error && <p className="text-red-500">{error}</p>}
+              <UploadDropzone
+                appearance={{
+                  container: {
+                    border: "1px solid blue",
+                  },
+                  uploadIcon: {
+                    color: "blue",
+                  },
+                }}
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  setImageUrl(res[0].url);
+                }}
+                onUploadError={(error) => {
+                  toast({
+                    title: "Upload Error",
+                    description: `ERROR! ${error.message}`,
+                    variant: "destructive",
+                  });
+                }}
+              />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Product Name"
+                required
+                className="border p-2"
+              />
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Product Description"
+                required
+                className="border p-2"
+              />
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleChange}
+                placeholder="Product Price"
+                required
+                className="border p-2"
+              />
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                className="border p-2"
+              >
+                <option value="" disabled>
+                  Select Category
+                </option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="submit"
+                style={{
+                  background: "#004AAD",
+                  color: "white",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  border: "none",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                }}
+                disabled={loading}
+              >
+                {loading ? "Submitting..." : "Submit"}
+              </button>
+            </form>
+            <Lottie
+              animationData={animationData1}
+              loop={true}
+              autoplay={true}
+              style={{
+                width: 320,
+                height: 320,
+                marginTop: -250,
+                marginRight: 20,
+              }}
+            />
+          </div>
+        )}
       </main>
     </>
   );
