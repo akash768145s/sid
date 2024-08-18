@@ -1,8 +1,8 @@
 "use client";
-import Navbar from "@/components/dashboard/navbar";
-import Navbar2 from "../app/navbar/page";
-import Footer from "@/components/dashboard/footer";
-
+import Navbar from "@/components/Main/navbar";
+import Navbar2 from "../components/Main/pNavbar/pNav";
+import Footer from "@/components/Footer/footer";
+import Hero from "../components/Main/Hero/Hero";
 const Home = () => {
   return (
     <>
@@ -10,8 +10,9 @@ const Home = () => {
         <Navbar />
       </div>
       <Navbar2 />
+      <Hero />
       <main style={{ paddingTop: "160px" }}></main>
-    
+
       <Footer />
     </>
   );

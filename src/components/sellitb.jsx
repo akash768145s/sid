@@ -17,11 +17,11 @@ const SellButton = () => {
 
   // Default styles
   const baseStyle = {
-    padding: "20px 50px",
+    padding: "10px 25px",
     border: "0",
     borderRadius: "120px",
-    backgroundColor: "#fff",
-    color: "#004AAD",
+    backgroundColor: "#004AAD",
+    color: "#fff",
     fontWeight: "extrabold",
     fontSize: "24px",
     transition: "all 0.5s",
@@ -50,7 +50,6 @@ const SellButton = () => {
   };
 
   const hoverStyle = {
-    backgroundColor: "#f0f0f0",
     boxShadow: "0 0 25px #6fc5ff50",
     transform: "scale(1.1)",
   };

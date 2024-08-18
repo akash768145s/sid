@@ -10,12 +10,16 @@ const Navbar = () => {
   return (
     <>
       <style jsx>{`
+        @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Oswald:wght@200..700&display=swap");
+        h1 {
+          font-family: "Oswald";
+        }
         .navbar {
           background-color: #004aad;
-          height: 120px;
+          height: 80px;
           display: flex;
           align-items: center;
-          justify-content: space-between;
+          justify-content: space-between; /* Add this line */
           padding: 0 2rem;
         }
 
@@ -78,7 +82,6 @@ const Navbar = () => {
       `}</style>
 
       <nav className="navbar">
-        {/* Logo */}
         <div className="logoContainer">
           <Image
             src="/logo.png"
@@ -113,5 +116,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-

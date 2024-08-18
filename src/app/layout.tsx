@@ -7,14 +7,18 @@ import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-
+import Lottie from "lottie-react"; // Import the Lottie component
+import animationData from "../../public/Loading.json"; // Replace with your actual Lottie file path
 
 const inter = Oswald({ subsets: ["latin"] });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
-
       <body className={inter.className}>
         <SessionProvider>
           <AppWrapper>{children}</AppWrapper>
@@ -27,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 function AppWrapper({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const pathname = usePathname(); // Get the current pathname
+  const pathname = usePathname();
 
   useEffect(() => {
     if (status === "unauthenticated" && pathname !== "/sign-in") {
@@ -36,11 +40,20 @@ function AppWrapper({ children }: { children: React.ReactNode }) {
   }, [status, router, pathname]);
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Lottie
+          animationData={animationData}
+          loop={true}
+          autoplay={true}
+          style={{ width: 300, height: 300 }}
+        />
+      </div>
+    );
   }
 
   if (status === "unauthenticated" && pathname !== "/sign-in") {
-    return null; // Or you can show a loading spinner or a placeholder
+    return null;
   }
 
   return <div className="mx-auto text-2xl gap-2 mb-10">{children}</div>;

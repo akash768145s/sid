@@ -11,7 +11,7 @@ const HomePage = () => {
   return (
     <div
       className="flex flex-col items-center justify-center min-h-screen bg-cover bg-center p-4"
-      style={{ backgroundImage: 'url("/sign-in.png")' }} // Update the path to your image
+      style={{ backgroundImage: 'url("/sign-in.png")' }}
     >
       {session ? (
         <>

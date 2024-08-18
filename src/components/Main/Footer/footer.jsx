@@ -1,5 +1,5 @@
-'use client';
-import { FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa';
+"use client";
+import { IoLocationSharp } from "react-icons/io5";
 const Footer = () => {
   return (
     <>
@@ -27,10 +27,9 @@ const Footer = () => {
                       sellitdude@gmail.com
                     </div>
                   </div>
-                  <div className="w-[194.9px] flex flex-row items-start justify-start gap-[20px]">
-                  <FaFacebook  className="w-[64.9px] h-[64.9px] text-black" />
-                    <FaInstagram className="w-[64.9px] h-[64.9px] text-black" />
-                    <FaLinkedin className="w-[64.9px] h-[64.9px] text-black" />
+                  <div className="w-[194.9px] flex flex-row items-start justify-end gap-[20px] ml-auto">
+                    <IoLocationSharp className="w-[42px] h-[42px] text-black -mr-6" />
+                    <h1 className="mt-2">Chennai, IN</h1>
                   </div>
                 </div>
               </div>
@@ -40,8 +39,6 @@ const Footer = () => {
       </div>
     </>
   );
-}
+};
 
 export default Footer;
-
-
