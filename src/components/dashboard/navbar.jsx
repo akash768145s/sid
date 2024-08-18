@@ -12,7 +12,7 @@ const Navbar = () => {
       <style jsx>{`
         .navbar {
           background-color: #004aad;
-          height: 120px;
+          height: 80px;
           display: flex;
           align-items: center;
           justify-content: space-between;

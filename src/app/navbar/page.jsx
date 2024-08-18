@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import Link from "next/link"; // Use Link for navigation in Next.js
 import "./main.css";
@@ -9,7 +10,7 @@ import accessoriesIcon from "../../../public/Shopping Bag.png";
 import profileIcon from "../../../public/Person.png";
 import CImage from "../../../public/Girl-Img.png";
 import Image from "next/image";
-
+import SellButton from "../../components/button2";
 const Navbar2 = () => {
   return (
     <>
@@ -37,16 +38,17 @@ const Navbar2 = () => {
               <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
             </svg>
           </label>
-          <Link href="/" className="nav-link">
-            <Image
-              src={Home}
-              alt="Home"
-              width={40}
-              height={40}
-            />
+
+          <Link
+            href="/"
+            className="nav-link"
+            style={{ marginRight: "80px", marginLeft: "50px" }}
+          >
+            <Image src={Home} alt="Home" width={40} height={40} />
             Home
           </Link>
-          <Link href="/" className="nav-link">
+
+          <Link href="/" className="nav-link" style={{ marginRight: "80px" }}>
             <Image
               src={stationaryIcon}
               alt="Stationary"
@@ -55,11 +57,19 @@ const Navbar2 = () => {
             />
             Stationary
           </Link>
-          <Link href="/about" className="nav-link">
+          <Link
+            href="/about"
+            className="nav-link"
+            style={{ marginRight: "80px" }}
+          >
             <Image src={sportsIcon} alt="Sports" width={45} height={45} />
             Sports Equipment
           </Link>
-          <Link href="/products" className="nav-link">
+          <Link
+            href="/products"
+            className="nav-link"
+            style={{ marginRight: "80px" }}
+          >
             <Image
               src={electronicsIcon}
               alt="Electronics"
@@ -68,7 +78,11 @@ const Navbar2 = () => {
             />
             Electronics
           </Link>
-          <Link href="/blog" className="nav-link">
+          <Link
+            href="/blog"
+            className="nav-link"
+            style={{ marginRight: "80px" }}
+          >
             <Image
               src={accessoriesIcon}
               alt="Accessories"
@@ -83,32 +97,6 @@ const Navbar2 = () => {
           </Link>
         </div>
       </nav>
-      <div className={`relative text-center mt-20`}>
-        <div
-          style={{
-            position: "absolute",
-            top: "1.5rem",
-            right: "10rem",
-            color: "#004aad",
-            textAlign: "right",
-            padding: "1rem",
-          }}
-        >
-          <h2 style={{ fontSize: "3rem", fontWeight: "bold" }}>
-            Got Stuff? Get Cash!
-          </h2>
-          <p style={{ fontSize: "2rem", fontWeight: "lighter" }}>
-            TURN YOUR EXTRAS INTO EXTRA CASH
-          </p>
-        </div>
-        <Image
-          src={CImage}
-          alt="Carousal Image"
-          width={741}
-          height={442}
-          style={{ maxWidth: "100%" }}
-        />
-      </div>
     </>
   );
 };

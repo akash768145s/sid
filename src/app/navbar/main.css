@@ -3,7 +3,7 @@
 :root {
     --color-1: #ffffff;
     --text-color: #f0f0f0;
-    --accent-color: #006aff;
+    --accent-color: #599ff9;
 }
 
 
@@ -24,10 +24,9 @@
 }
 
 .nav-link:hover {
-    color: #004aad;
-    border-radius: 20px;
+    border-radius: 30px; /* Makes the border circular */
+    border: 1px solid #004aad; /* Add your desired border thickness and color */
 }
-
 
 * {
     margin: 0;
@@ -36,7 +35,7 @@
 
 html {
     font-size: 12pt;
-    font-family: Poppins, Segoe UI, Tahoma, sans-serif;
+    font-family: Poppins;
 }
 
 nav {
@@ -64,9 +63,7 @@ nav a {
     color: var(--text-color);
 }
 
-nav a:hover {
-    background-color: var(--accent-color);
-}
+
 
 nav .home-link {
     margin-right: auto;

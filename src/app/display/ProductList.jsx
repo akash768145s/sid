@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
@@ -80,7 +80,7 @@ const ProductList = ({ products }) => {
   const handleRemoveFromWishlist = async (productId) => {
     try {
       const response = await fetch(`/api/wishlist/${productId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       const responseData = await response.json();
@@ -92,8 +92,34 @@ const ProductList = ({ products }) => {
         setMessage(responseData.message);
       }
     } catch (error) {
-      console.error('Error removing product from wishlist:', error);
-      setMessage('Error removing product from wishlist.');
+      console.error("Error removing product from wishlist:", error);
+      setMessage("Error removing product from wishlist.");
+    }
+  };
+
+  const handleSendEmail = async (sellerEmail) => {
+    try {
+      const response = await fetch("/api/sendEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          recipientEmail: session?.user?.email,
+          sellerEmail: sellerEmail,
+        }),
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok) {
+        setMessage(responseData.message);
+      } else {
+        setMessage(responseData.message);
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+      setMessage("Failed to send email.");
     }
   };
 
@@ -149,7 +175,8 @@ const ProductList = ({ products }) => {
               <p>₹{product.price}</p>
               <p>{product.category}</p>
               <p>Seller: {product.sellerName}</p>
-              <p>Seller Email: {product.sellerEmail}</p> {/* Display sellerEmail */}
+              <p>Seller Email: {product.sellerEmail}</p>{" "}
+              {/* Display sellerEmail */}
               {(session?.user?.name === product.sellerName ||
                 session?.user?.email === "sakthimuruganakash@gmail.com") && (
                 <button
@@ -164,6 +191,12 @@ const ProductList = ({ products }) => {
                 className="mt-2 p-2 bg-blue-500 text-white rounded"
               >
                 Add to Wishlist
+              </button>
+              <button
+                onClick={() => handleSendEmail(product.sellerEmail)}
+                className="mt-2 p-2 bg-green-500 text-white rounded"
+              >
+                Email Seller's Info
               </button>
             </div>
           ))

@@ -17,15 +17,16 @@ const SellButton = () => {
 
   // Default styles
   const baseStyle = {
-    padding: "20px 50px",
+    padding: "4px 18px",
     border: "0",
     borderRadius: "120px",
-    backgroundColor: "#fff",
-    color: "#004AAD",
+    backgroundColor: "#004AAD",
+    color: "#ffffff",
     fontWeight: "extrabold",
     fontSize: "24px",
     transition: "all 0.5s",
     WebkitTransition: "all 0.5s",
+    marginLeft: "-20px", // Adjust this value to move the button to the left
   };
 
   // Responsive styles based on window width
@@ -35,12 +36,14 @@ const SellButton = () => {
           padding: "10px 30px",
           borderRadius: "60px",
           fontSize: "18px",
+          marginLeft: "-10px", // Adjust this value for smaller screens
         }
       : windowWidth <= 768
       ? {
-          padding: "15px 40px",
-          borderRadius: "80px",
+          padding: "10px 30px",
+          borderRadius: "60px",
           fontSize: "20px",
+          marginLeft: "-15px", // Adjust this value for medium screens
         }
       : {};
 
@@ -50,7 +53,6 @@ const SellButton = () => {
   };
 
   const hoverStyle = {
-    backgroundColor: "#f0f0f0",
     boxShadow: "0 0 25px #6fc5ff50",
     transform: "scale(1.1)",
   };
