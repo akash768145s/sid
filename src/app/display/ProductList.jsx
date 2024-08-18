@@ -1,21 +1,10 @@
 "use client";
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-
-import {Button} from "@/components/ui/button";
+import "./prdlist css.css";
+import "./hello.css";
+import "./boot.css";
 
 const categories = [
   "All",
@@ -25,8 +14,59 @@ const categories = [
   "Other Accessories",
 ];
 
-const ProductList = ({ products }) => {
-  const { data: session, status } = useSession();
+const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
+  const { data: session } = useSession();
+
+  return (
+    <div className="container mt-5 mb-5">
+      <div className="d-flex justify-content-center row">
+        <div className="col-md-10">
+          <div className="row p-2 bg-white border rounded">
+            <div className="col-md-3 mt-1">
+              <Image
+                className="img-fluid img-responsive rounded product-image"
+                src={product.imageUrl}
+                alt={product.name}
+                width={300}
+                height={300}
+              />
+            </div>
+            <div className="col-md-6 mt-1">
+              <h5>{product.name}</h5>
+              <h4>{product.category}</h4>
+              <h3>Seller: {product.sellerName}</h3>
+              <p className="text-justify para mb-0">{product.description}</p>
+            </div>
+            <div className="align-items-center align-content-center col-md-3 border-left mt-1">
+              <div className="d-flex flex-row align-items-center">
+                <h4 className="mr-1">&#x20b9; {product.price}</h4>
+              </div>
+              <div className="d-flex flex-column mt-4">
+                {(session?.user?.name === product.sellerName ||
+                  session?.user?.email === "sakthimuruganakash@gmail.com") && (
+                  <button
+                    className="btn btn-danger btn-sm mb-2"
+                    onClick={() => onDelete(product._id)}
+                  >
+                    Delete
+                  </button>
+                )}
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => onAddToWishlist(product)}
+                >
+                  Add to Wishlist
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ProductList = ({ products = [] }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [productList, setProductList] = useState(products);
@@ -59,12 +99,15 @@ const ProductList = ({ products }) => {
         setProductList((prevList) =>
           prevList.filter((product) => product._id !== id)
         );
+        setMessage("Product deleted successfully.");
       } else {
         const errorData = await response.json();
         console.error("Failed to delete product:", errorData.message);
+        setMessage("Failed to delete product.");
       }
     } catch (error) {
       console.error("Error deleting product:", error);
+      setMessage("Error deleting product.");
     }
   };
 
@@ -91,25 +134,6 @@ const ProductList = ({ products }) => {
     }
   };
 
-  const handleRemoveFromWishlist = async (productId) => {
-    try {
-      const response = await fetch(`/api/wishlist/${productId}`, {
-        method: "DELETE",
-      });
-
-      const responseData = await response.json();
-
-      if (response.ok) {
-        setMessage(responseData.message);
-      } else {
-        setMessage(responseData.message);
-      }
-    } catch (error) {
-      console.error("Error removing product from wishlist:", error);
-      setMessage("Error removing product from wishlist.");
-    }
-  };
-
   const filteredProducts = productList.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
@@ -126,8 +150,8 @@ const ProductList = ({ products }) => {
 
   return (
     <div>
-      {message && <div className="alert">{message}</div>}
-      <div className="mb-4 flex flex-col md:flex-row gap-4">
+      {message && <div className="alert alert-info">{message}</div>}
+      <div className="mb-4 d-flex flex-column md:flex-row gap-4">
         <input
           type="text"
           value={searchQuery}
@@ -150,79 +174,12 @@ const ProductList = ({ products }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <div key={product._id} className="border p-4">
-              <Image
-                src={product.imageUrl}
-                alt={product.name}
-                width={500}
-                height={300}
-              />
-              <h2 className="text-xl font-bold">{product.name}</h2>
-              <p>{product.description}</p>
-              <p>₹{product.price}</p>
-              <p>{product.category}</p>
-              <p>Seller: {product.sellerName}</p>
-              {/* Gmail-specific Email Link with Dynamic 'From' */}
-              {session?.user?.name !== product.sellerName && (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button className="mt-2 p-2 bg-green-500 text-white rounded">
-                      Contact Seller
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Proceed to Contact Seller?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Are you sure you want to send an inquiry about this
-                        product? You will be redirected to your Gmail to send
-                        the email.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <Link
-                        href={`https://mail.google.com/mail/?view=cm&fs=1&to=${
-                          product.sellerEmail
-                        }&su=Inquiry%20About%20${encodeURIComponent(
-                          `[${product.name}]`
-                        )}&body=Dear%20${encodeURIComponent(
-                          product.sellerName
-                        )},%0D%0A%0D%0AI’m%20interested%20in%20the%20${encodeURIComponent(
-                          product.name
-                        )}%20listed%20on%20Sell%20It%20Dude!.%20Could%20you%20provide%20more%20details%20or%20suggest%20a%20time%20to%20discuss?%0D%0A%0D%0AThank%20you!%0D%0A%0D%0ABest%20regards,%0D%0A${encodeURIComponent(
-                          session?.user?.name || "Buyer"
-                        )}%0D%0A%0D%0A***NOTE: YOU CAN CONTINUE THE CONVERSATION BY REPLYING TO THIS EMAIL.***%0D%0A%0D%0AFor%20any%20issues,%20contact%20our%20team.%0D%0A%0D%0ABest%20regards,%0D%0ATeam%20SID`}
-                        passHref
-                      >
-                        <AlertDialogAction asChild>
-                          <Button variant="default">Continue</Button>
-                        </AlertDialogAction>
-                      </Link>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              )}
-              {(session?.user?.name === product.sellerName ||
-                session?.user?.email === "sakthimuruganakash@gmail.com") && (
-                <button
-                  onClick={() => handleDeleteProduct(product._id)}
-                  className="mt-2 p-2 bg-red-500 text-white rounded"
-                >
-                  Delete
-                </button>
-              )}
-              {session?.user?.name !== product.sellerName && (
-                <button
-                  onClick={() => handleAddToWishlist(product)}
-                  className="mt-2 p-2 bg-blue-500 text-white rounded"
-                >
-                  Add to Wishlist
-                </button>
-              )}
-            </div>
+            <ProductCard
+              key={product._id}
+              product={product}
+              onDelete={handleDeleteProduct}
+              onAddToWishlist={handleAddToWishlist}
+            />
           ))
         ) : (
           <p>No products found.</p>
