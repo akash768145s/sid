@@ -21,9 +21,13 @@ const Navbar2 = () => {
             viewBox="0 -960 960 960"
             width="32"
           >
-            <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
+            <path
+              d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
+              fill="#004aad"
+            />
           </svg>
         </label>
+
         <label id="overlay" htmlFor="sidebar-active"></label>
         <div className="links-container">
           <label htmlFor="sidebar-active" className="close-sidebar-button">
@@ -33,9 +37,13 @@ const Navbar2 = () => {
               viewBox="0 -960 960 960"
               width="32"
             >
-              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+              <path
+                d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
+                fill="#004aad"
+              />
             </svg>
           </label>
+
           <Link
             href="/"
             className="nav-link"
