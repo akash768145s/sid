@@ -108,7 +108,7 @@ const Navbar2 = () => {
           </Link>
 
           <Link
-            href="/login"
+            href="/Profile"
             className="nav-link"
             style={{ marginRight: "100px", marginTop: "10px" }}
           >

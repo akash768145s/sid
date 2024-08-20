@@ -39,16 +39,16 @@ const HomePage = () => {
       ) : (
         <div className="text-center">
           <Image
-            src="/Logo2.png" // Update the path to your logo image
+            src="/Logo2.png" 
             alt="Logo"
-            width={175} // Set the desired width
-            height={175} // Set the desired height
+            width={175} 
+            height={175}
             className="mb-4"
-            style={{ marginLeft: "20px" }} // Adjust the margin to move the image to the right
+            style={{ marginLeft: "20px" }}
           />
           <h1
             className="font-semibold text-white mb-2"
-            style={{ fontSize: "2rem", marginTop: "-35px" }} // Move the tagline up slightly
+            style={{ fontSize: "2rem", marginTop: "-35px" }} 
           >
             Sell it Dude!
           </h1>

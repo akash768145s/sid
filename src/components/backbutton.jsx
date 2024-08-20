@@ -1,10 +1,11 @@
 import React from "react";
 import { useRouter } from 'next/navigation';
+
 const BackButton = () => {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push("/"); // Navigates to the home page
+    router.push("/"); 
   };
   return (
     <button className="back-button" onClick={handleClick}>

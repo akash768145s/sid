@@ -70,3 +70,27 @@ export async function DELETE(request) {
     );
   }
 }
+
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const sellerEmail = searchParams.get("sellerEmail");
+
+  await connect();
+
+  try {
+    let products;
+    if (sellerEmail) {
+      products = await Product.find({ sellerEmail });
+    } else {
+      products = await Product.find();
+    }
+
+    return NextResponse.json({ products });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

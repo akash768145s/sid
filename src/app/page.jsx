@@ -12,7 +12,6 @@ const Home = () => {
       <Navbar2 />
       <Hero />
       <main style={{ paddingTop: "160px" }}></main>
-
       <Footer />
     </>
   );

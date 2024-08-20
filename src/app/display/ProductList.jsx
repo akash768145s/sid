@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import "./prdlist css.css";
-import "./hello.css";
-import "./boot.css";
+import "./1.css";
+import "./2.css";
+import "./3.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Modal from "../../components/Model/Modal";
@@ -102,82 +102,90 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
   };
 
   return (
-    <div className="container mt-5 mb-5" onClick={() => handleNavigateToProductPage(product)}>
-      <div className="d-flex justify-content-center row">
-        <div className="col-md-10">
-          <div className="row p-2 bg-white border rounded">
-            <div className="col-md-3 mt-1">
-              <Image
-                className="img-fluid img-responsive rounded product-image"
-                src={product.imageUrl}
-                alt={product.name}
-                width={150}
-                height={150}
-              />
-            </div>
-            <div className="col-md-6 mt-1">
-              <div className="p-4 bg-white shadow-md rounded-lg max-w-sm">
-                <div className="text-lg font-semibold text-gray-800">
-                  {product.name}
-                </div>
-                <div className="text-md font-medium text-blue-600 mt-1">
-                  {product.category}
-                </div>
-                <div className="text-sm text-gray-600 mt-2">
-                  Seller:{" "}
-                  <span className="font-medium text-gray-800">
-                    {product.sellerName}
-                  </span>
-                </div>
-                <p className="text-justify text-gray-700 mt-3">
-                  {product.description.length > 250
-                    ? `${product.description.slice(0, 250)}...`
-                    : product.description}
-                </p>
-                {!isSeller && (
+    <div className="container mt-5 mb-5">
+    <div className="d-flex justify-content-center row">
+      <div className="col-md-10">
+        <div className="row p-2 bg-white border rounded">
+          <div className="col-md-3 mt-1">
+            <Image
+              className="img-fluid img-responsive rounded product-image"
+              src={product.imageUrl}
+              alt={product.name}
+              width={150}
+              height={150}
+            />
+          </div>
+          <div className="col-md-6 mt-1">
+            <div className="p-4 bg-white rounded-lg max-w-sm">
+              <div className="text-lg font-semibold text-gray-800">
+                {product.name}
+              </div>
+              <div className="text-md font-medium text-blue-600 mt-1">
+                {product.category}
+              </div>
+              <div className="text-sm text-gray-600 mt-2">
+                Seller:{" "}
+                <span className="font-medium text-gray-800">
+                  {product.sellerName}
+                </span>
+              </div>
+              <p className="text-justify text-gray-700 mt-3">
+                {product.description.length > 250
+                  ? `${product.description.slice(0, 250)}...`
+                  : product.description}
+              </p>
+              {!isSeller && (
+                <>
                   <button
                     className="mt-2 p-2 bg-green-500 text-white rounded"
                     onClick={handleOpenModal}
                   >
                     Contact Seller
                   </button>
-                )}
-              </div>
+                  <button
+                    className="mt-2 ml-2 p-2 bg-blue-500 text-white rounded"
+                    onClick={() => handleNavigateToProductPage(product)}
+                  >
+                    View
+                  </button>
+                </>
+              )}
             </div>
-            <div className="align-items-center align-content-center col-md-3 border-left mt-1">
-              <div className="d-flex flex-row align-items-center">
-                <h4 className="mr-1">&#x20b9; {product.price}</h4>
-              </div>
-              <div className="d-flex flex-column mt-4">
-                {isSeller && (
-                  <button
-                    className="btn btn-danger btn-sm mb-2"
-                    onClick={handleDelete}
-                  >
-                    Delete
-                  </button>
-                )}
-                {!isSeller && (
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() => onAddToWishlist(product)}
-                  >
-                    Add to Wishlist
-                  </button>
-                )}
-              </div>
+          </div>
+          <div className="align-items-center align-content-center col-md-3 border-left mt-1">
+            <div className="d-flex flex-row align-items-center">
+              <h4 className="mr-1">&#x20b9; {product.price}</h4>
+            </div>
+            <div className="d-flex flex-column mt-4">
+              {isSeller && (
+                <button
+                  className="btn btn-danger btn-sm mb-2"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              )}
+              {!isSeller && (
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => onAddToWishlist(product)}
+                >
+                  Add to Wishlist
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onConfirm={handleConfirmModal}
-        message="Do you want to chat with the seller?"
-      />
-      <ToastContainer />
     </div>
+    <Modal
+      isOpen={isModalOpen}
+      onClose={handleCloseModal}
+      onConfirm={handleConfirmModal}
+      message="Do you want to chat with the seller?"
+    />
+    <ToastContainer />
+  </div>
   );
 };
 
