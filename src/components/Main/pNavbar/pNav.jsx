@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link"; // Use Link for navigation in Next.js
+import Link from "next/link";
 import "./main.css";
 import stationaryIcon from "../../../../public/Book.png";
 import Home from "../../../../public/Home.png";
@@ -12,7 +12,8 @@ import Image from "next/image";
 const Navbar2 = () => {
   return (
     <>
-      <nav>
+      <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
+        
         <input type="checkbox" id="sidebar-active" />
         <label htmlFor="sidebar-active" className="open-sidebar-button">
           <svg
@@ -27,7 +28,6 @@ const Navbar2 = () => {
             />
           </svg>
         </label>
-
         <label id="overlay" htmlFor="sidebar-active"></label>
         <div className="links-container">
           <label htmlFor="sidebar-active" className="close-sidebar-button">
@@ -72,9 +72,9 @@ const Navbar2 = () => {
               marginRight: "100px",
               marginTop: "10px",
               display: "flex",
-              alignItems: "center", // Align image and text vertically
-              whiteSpace: "nowrap", // Prevent text from wrapping
-              lineHeight: "1.2", // Adjust line height if needed
+              alignItems: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "1.2",
             }}
           >
             <Image src={sportsIcon} alt="Sports" width={45} height={45} />
@@ -101,9 +101,9 @@ const Navbar2 = () => {
               marginRight: "100px",
               marginTop: "10px",
               display: "flex",
-              alignItems: "center", // Align image and text vertically
-              whiteSpace: "nowrap", // Prevent text from wrapping
-              lineHeight: "1.2", // Adjust line height if needed
+              alignItems: "center",
+              whiteSpace: "nowrap",
+              lineHeight: "1.2",
             }}
           >
             <Image

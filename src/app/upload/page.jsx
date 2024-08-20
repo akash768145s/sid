@@ -1,15 +1,14 @@
-"use client";
-
+'use client';
+import React, { useState, useEffect } from "react";
 import { UploadDropzone } from "@/utils/uploadthing";
 import Lottie from "lottie-react";
 import animationData from "../../../public/Animation - 1723045195064.json";
 import animationData1 from "../../../public/Animation - 1723045183398.json";
-import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
 import Image from "next/image";
 import backIcon from "../../../public/ba.png";
+import Alert from "@/components/Alert/Alert"; // Import the Alert component
 
 const categories = [
   "Stationary",
@@ -30,8 +29,7 @@ const UploadButton = () => {
   const [error, setError] = useState("");
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { toast } = useToast();
-
+  const [alert, setAlert] = useState(null); // Alert state
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -47,7 +45,7 @@ const UploadButton = () => {
     };
 
     window.addEventListener("resize", handleResize);
-    handleResize(); // Check the initial window size
+    handleResize();
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -100,30 +98,28 @@ const UploadButton = () => {
       });
 
       if (response.ok) {
-        toast({
-          title: "Success",
-          description: "Product created successfully",
+        setAlert({
+          message: "Product created successfully",
+          variant: "success",
         });
         setFormData({ name: "", description: "", price: "", category: "" });
         setImageUrl("");
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Error creating product");
+        setAlert({
+          message: errorData.message || "Error creating product",
+          variant: "error",
+        });
         if (imageUrl) {
           setImageUrl("");
         }
-        toast({
-          title: "Error",
-          description: errorData.message || "Error creating product",
-          variant: "destructive",
-        });
       }
     } catch (err) {
       setError("Error creating product");
-      toast({
-        title: "Error",
-        description: "Error creating product",
-        variant: "destructive",
+      setAlert({
+        message: "Error creating product",
+        variant: "error",
       });
     } finally {
       setLoading(false);
@@ -184,11 +180,11 @@ const UploadButton = () => {
           }
 
           .form-container {
-            max-width: 150%; /* Increased width for mobile */
+            max-width: 150%;
             width: 150%;
             padding: 20px;
             margin: 0 auto;
-            margin-top: 20px; /* Adjusted for mobile */
+            margin-top: 20px;
             margin-left: -55px;
           }
 
@@ -239,10 +235,9 @@ const UploadButton = () => {
                   setImageUrl(res[0].url);
                 }}
                 onUploadError={(error) => {
-                  toast({
-                    title: "Upload Error",
-                    description: `ERROR! ${error.message}`,
-                    variant: "destructive",
+                  setAlert({
+                    message: `ERROR! ${error.message}`,
+                    variant: "error",
                   });
                 }}
               />
@@ -339,10 +334,9 @@ const UploadButton = () => {
                   setImageUrl(res[0].url);
                 }}
                 onUploadError={(error) => {
-                  toast({
-                    title: "Upload Error",
-                    description: `ERROR! ${error.message}`,
-                    variant: "destructive",
+                  setAlert({
+                    message: `ERROR! ${error.message}`,
+                    variant: "error",
                   });
                 }}
               />
@@ -418,6 +412,14 @@ const UploadButton = () => {
           </div>
         )}
       </main>
+
+      {alert && (
+        <Alert
+          message={alert.message}
+          variant={alert.variant}
+          onClose={() => setAlert(null)}
+        />
+      )}
     </>
   );
 };
