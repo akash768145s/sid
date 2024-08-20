@@ -8,6 +8,7 @@ import "./hello.css";
 import "./boot.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Modal from "../../components/Model/Modal";
 
 const categories = [
   "All",
@@ -20,6 +21,51 @@ const categories = [
 const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
   const { data: session } = useSession();
   const isSeller = session?.user?.email === product.sellerEmail;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleDelete = () => {
+    const confirmDelete = window.confirm(
+      "Do you really want to delete this product?"
+    );
+    if (confirmDelete) {
+      onDelete(product._id);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleConfirmModal = () => {
+    const subject = encodeURIComponent(`Inquiry About [${product.name}]`);
+    const body = encodeURIComponent(`
+  Dear ${product.sellerName},
+  
+  I am interested in the ${
+    product.name
+  } listed on SellITDUDE. Could you provide more details or suggest a time to discuss?
+  
+  Thank you!
+  
+  Best regards,
+  ${session?.user?.name || "Buyer"}
+  
+  Note: You can continue the conversation by replying to this email.
+  
+  For any issues, contact our team.
+  
+  Best regards,
+  Team SID`);
+
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${product.sellerEmail}&su=${subject}&body=${body}`;
+
+    window.location.href = gmailUrl;
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="container mt-5 mb-5">
@@ -55,26 +101,12 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
                     : product.description}
                 </p>
                 {!isSeller && (
-                  <Link
-                    href={`https://mail.google.com/mail/?view=cm&fs=1&to=${
-                      product.sellerEmail
-                    }&su=Inquiry%20About%20${encodeURIComponent(
-                      `[${product.name}]`
-                    )}&body=Dear%20${encodeURIComponent(
-                      product.sellerName
-                    )},%0D%0A%0D%0AI’m%20interested%20in%20the%20${encodeURIComponent(
-                      product.name
-                    )}%20listed%20on%20SellITDUDE.%20Could%20you%20provide%20more%20details%20or%20suggest%20a%20time%20to%20discuss?%0D%0A%0D%0AThank%20you!%0D%0A%0D%0ABest%20regards,%0D%0A${encodeURIComponent(
-                      session?.user?.name || "Buyer"
-                    )}%0D%0A${encodeURIComponent(
-                      session?.user?.email || ""
-                    )}%0D%0A%0D%0ANote:%20You%20can%20continue%20the%20conversation%20by%20replying%20to%20this%20email.%0D%0A%0D%0AFor%20any%20issues,%20contact%20our%20team.%0D%0A%0D%0ABest%20regards,%0D%0ATeam%20SID`}
-                    passHref
+                  <button
+                    className="mt-2 p-2 bg-green-500 text-white rounded"
+                    onClick={handleOpenModal}
                   >
-                    <button className="mt-2 p-2 bg-green-500 text-white rounded">
-                      Contact Seller
-                    </button>
-                  </Link>
+                    Contact Seller
+                  </button>
                 )}
               </div>
             </div>
@@ -86,7 +118,7 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
                 {isSeller && (
                   <button
                     className="btn btn-danger btn-sm mb-2"
-                    onClick={() => onDelete(product._id)}
+                    onClick={handleDelete}
                   >
                     Delete
                   </button>
@@ -94,7 +126,7 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
                 {!isSeller && (
                   <button
                     className="btn btn-primary btn-sm"
-                    onClick={() => onAddToWishlist(product)} // Pass the product to the function
+                    onClick={() => onAddToWishlist(product)}
                   >
                     Add to Wishlist
                   </button>
@@ -104,6 +136,12 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmModal}
+        message="Do you want to chat with the seller?"
+      />
       <ToastContainer />
     </div>
   );
