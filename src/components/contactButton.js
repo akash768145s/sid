@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 
-const ContactSellerButton = () => {
+const GmailSender = () => {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
 
@@ -37,4 +37,4 @@ const ContactSellerButton = () => {
   );
 };
 
-export default ContactSellerButton;
+export default GmailSender;

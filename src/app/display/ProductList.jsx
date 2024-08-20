@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import Link from "next/link"; // Make sure Link is imported
 import "./prdlist css.css";
 import "./hello.css";
 import "./boot.css";
@@ -22,6 +22,14 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
   const { data: session } = useSession();
   const isSeller = session?.user?.email === product.sellerEmail;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleNavigateToProductPage = (product) => {
+    router.push(
+      `/product/${product.id}?name=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}&description=${encodeURIComponent(product.description)}&imageUrl=${encodeURIComponent(product.imageUrl)}`
+    );
+  };
 
   const handleDelete = () => {
     const confirmDelete = window.confirm(
@@ -40,7 +48,9 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
     setIsModalOpen(false);
   };
 
-  const handleConfirmModal = () => {
+  const handleConfirmModal = async () => {
+    // Prepare the email content
+    setLoading(true);
     const subject = encodeURIComponent(`Inquiry About [${product.name}]`);
     const body = encodeURIComponent(`
   Dear ${product.sellerName},
@@ -63,12 +73,36 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
 
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${product.sellerEmail}&su=${subject}&body=${body}`;
 
-    window.location.href = gmailUrl;
-    setIsModalOpen(false);
+    try {
+      const userEmail = session?.user?.email;
+      const response = await fetch("/api/contact-seller", {
+        method: "POST",
+        body: JSON.stringify({ userEmail }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Open Gmail with the prepared email content
+        window.location.href = gmailUrl;
+      } else {
+        // Handle API response errors
+        alert(data.message || "Failed to contact seller.");
+      }
+    } catch (error) {
+      console.error("Error contacting seller:", error);
+      alert("Error contacting seller.");
+    } finally {
+      setLoading(false);
+      setIsModalOpen(false);
+    }
   };
 
   return (
-    <div className="container mt-5 mb-5">
+    <div className="container mt-5 mb-5" onClick={() => handleNavigateToProductPage(product)}>
       <div className="d-flex justify-content-center row">
         <div className="col-md-10">
           <div className="row p-2 bg-white border rounded">

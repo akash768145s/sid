@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+import Link from "next/link"; // Use Link for navigation in Next.js
 import "./main.css";
 import stationaryIcon from "../../../../public/Book.png";
 import Home from "../../../../public/Home.png";
@@ -12,8 +12,7 @@ import Image from "next/image";
 const Navbar2 = () => {
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
-        
+      <nav>
         <input type="checkbox" id="sidebar-active" />
         <label htmlFor="sidebar-active" className="open-sidebar-button">
           <svg
@@ -22,10 +21,7 @@ const Navbar2 = () => {
             viewBox="0 -960 960 960"
             width="32"
           >
-            <path
-              d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"
-              fill="#004aad"
-            />
+            <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" fill="#004aad"/>
           </svg>
         </label>
         <label id="overlay" htmlFor="sidebar-active"></label>
@@ -37,13 +33,9 @@ const Navbar2 = () => {
               viewBox="0 -960 960 960"
               width="32"
             >
-              <path
-                d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"
-                fill="#004aad"
-              />
+              <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" fill="#004aad" />
             </svg>
           </label>
-
           <Link
             href="/"
             className="nav-link"
@@ -72,9 +64,9 @@ const Navbar2 = () => {
               marginRight: "100px",
               marginTop: "10px",
               display: "flex",
-              alignItems: "center",
-              whiteSpace: "nowrap",
-              lineHeight: "1.2",
+              alignItems: "center", // Align image and text vertically
+              whiteSpace: "nowrap", // Prevent text from wrapping
+              lineHeight: "1.2", // Adjust line height if needed
             }}
           >
             <Image src={sportsIcon} alt="Sports" width={45} height={45} />
@@ -101,9 +93,9 @@ const Navbar2 = () => {
               marginRight: "100px",
               marginTop: "10px",
               display: "flex",
-              alignItems: "center",
-              whiteSpace: "nowrap",
-              lineHeight: "1.2",
+              alignItems: "center", // Align image and text vertically
+              whiteSpace: "nowrap", // Prevent text from wrapping
+              lineHeight: "1.2", // Adjust line height if needed
             }}
           >
             <Image

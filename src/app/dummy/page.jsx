@@ -1,11 +1,11 @@
 import React from "react";
 import "./main.css"; // Ensure this path is correct based on your project structure
-import Navbar from "@/components/dashboard/nav";
+import Navbar from "@/components/Main/nav";
 
 const ProductPage = () => {
   return (
-    <><Navbar />
-    
+    <>
+    <Navbar />
     <div className="container">
       <section className="main">
         <div className="default gallery">

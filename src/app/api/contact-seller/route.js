@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import cron from "node-cron";
 
-let emailTasks = []; // Store scheduled tasks (optional)
+let emailTasks = []; 
 
 export async function POST(request) {
   const { userEmail } = await request.json();
