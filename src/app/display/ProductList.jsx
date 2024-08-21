@@ -26,9 +26,22 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
   const router = useRouter();
 
   const handleNavigateToProductPage = (product) => {
-    router.push(
-      `/product/${product.id}?name=${encodeURIComponent(product.name)}&price=${encodeURIComponent(product.price)}&description=${encodeURIComponent(product.description)}&imageUrl=${encodeURIComponent(product.imageUrl)}`
-    );
+    const productPageUrl = `/product/${product._id}?_id=${encodeURIComponent(
+      product._id
+    )}&name=${encodeURIComponent(product.name)}&price=${encodeURIComponent(
+      product.price
+    )}&sellerEmail=${encodeURIComponent(
+      product.sellerEmail
+    )}&sellerName=${encodeURIComponent(
+      product.sellerName
+    )}&description=${encodeURIComponent(
+      product.description
+    )}&imageUrl=${encodeURIComponent(
+      product.imageUrl
+    )}&category=${encodeURIComponent(product.category)}
+    &sellerName=${product.sellerName}`;
+
+    router.push(productPageUrl);
   };
 
   const handleDelete = () => {
@@ -102,90 +115,77 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
   };
 
   return (
-    <div className="container mt-5 mb-5">
-    <div className="d-flex justify-content-center row">
-      <div className="col-md-10">
-        <div className="row p-2 bg-white border rounded">
-          <div className="col-md-3 mt-1">
-            <Image
-              className="img-fluid img-responsive rounded product-image"
-              src={product.imageUrl}
-              alt={product.name}
-              width={150}
-              height={150}
-            />
-          </div>
-          <div className="col-md-6 mt-1">
-            <div className="p-4 bg-white rounded-lg max-w-sm">
-              <div className="text-lg font-semibold text-gray-800">
-                {product.name}
+    <div className="bg-[#004aad] py-5 mb-[-140px] ">
+      <div className="container mt-5 mb-5">
+        <div className="d-flex justify-content-center row">
+          <div className="col-md-10">
+            <div className="row p-2 bg-[#004aad] border rounded">
+              <div className="col-md-3 mt-1">
+                <Image
+                  className="w-[150px] h-[150px] object-cover rounded product-image"
+                  src={product.imageUrl}
+                  alt={product.name}
+                  width={150}
+                  height={150}
+                />
               </div>
-              <div className="text-md font-medium text-blue-600 mt-1">
-                {product.category}
+              <div className="col-md-6 mt-1">
+                <div className="p-4 bg-[#004aad] rounded-lg max-w-sm">
+                  <div className="text-5xl font-semibold text-white">
+                    {product.name}
+                  </div>
+                  <div className="text-[18px] font-medium text-gray-400 mt-1">
+                    {product.category}
+                  </div>
+                  <div className="text-[18px] text-gray-300 mt-2">
+                    Seller:{" "}
+                    <span className="font-medium text-gray-300 ">
+                      {product.sellerName}
+                    </span>
+                  </div>
+                </div>
               </div>
-              <div className="text-sm text-gray-600 mt-2">
-                Seller:{" "}
-                <span className="font-medium text-gray-800">
-                  {product.sellerName}
-                </span>
-              </div>
-              <p className="text-justify text-gray-700 mt-3">
-                {product.description.length > 250
-                  ? `${product.description.slice(0, 250)}...`
-                  : product.description}
-              </p>
-              {!isSeller && (
-                <>
+              <div className="align-items-center align-content-center col-md-3 border-left mt-1">
+                <div className="d-flex flex-row align-items-center">
+                  <h4 className="mr-1 text-white">&#x20b9; {product.price}</h4>
+                </div>
+                <div className="d-flex flex-column h-full mt-4">
+                  {isSeller && (
+                    <button
+                      className="btn btn-danger btn-sm mb-2"
+                      onClick={handleDelete}
+                    >
+                      Delete
+                    </button>
+                  )}
+                  {!isSeller && (
+                    <button
+                      className="btn btn-primary btn-sm mb-2"
+                      onClick={() => onAddToWishlist(product)}
+                    >
+                      Add to Wishlist
+                    </button>
+                  )}
                   <button
-                    className="mt-2 p-2 bg-green-500 text-white rounded"
-                    onClick={handleOpenModal}
-                  >
-                    Contact Seller
-                  </button>
-                  <button
-                    className="mt-2 ml-2 p-2 bg-blue-500 text-white rounded"
+                    className="bg-blue-500 btn btn-primary btn-sm"
                     onClick={() => handleNavigateToProductPage(product)}
                   >
-                    View
+                    View Item
                   </button>
-                </>
-              )}
-            </div>
-          </div>
-          <div className="align-items-center align-content-center col-md-3 border-left mt-1">
-            <div className="d-flex flex-row align-items-center">
-              <h4 className="mr-1">&#x20b9; {product.price}</h4>
-            </div>
-            <div className="d-flex flex-column mt-4">
-              {isSeller && (
-                <button
-                  className="btn btn-danger btn-sm mb-2"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </button>
-              )}
-              {!isSeller && (
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => onAddToWishlist(product)}
-                >
-                  Add to Wishlist
-                </button>
-              )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onConfirm={handleConfirmModal}
+          message="Do you want to chat with the seller?"
+        />
+        <ToastContainer />
       </div>
     </div>
-    <Modal
-      isOpen={isModalOpen}
-      onClose={handleCloseModal}
-      onConfirm={handleConfirmModal}
-      message="Do you want to chat with the seller?"
-    />
-    <ToastContainer />
-  </div>
   );
 };
 
@@ -296,7 +296,7 @@ const ProductList = ({ products = [] }) => {
   }
 
   return (
-    <div>
+    <div className="bg-[#004aad]">
       {message && <div className="alert alert-info">{message}</div>}
       <div className="mb-4 d-flex flex-column md:flex-row gap-4">
         <input
@@ -318,7 +318,7 @@ const ProductList = ({ products = [] }) => {
           ))}
         </select>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
             <ProductCard
@@ -326,6 +326,7 @@ const ProductList = ({ products = [] }) => {
               product={product}
               onDelete={handleDeleteProduct}
               onAddToWishlist={handleAddToWishlist}
+              className="mb-[-10px]" // Negative margin to reduce gap
             />
           ))
         ) : (

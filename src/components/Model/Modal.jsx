@@ -8,7 +8,7 @@ const Modal = ({ isOpen, onClose, onConfirm, message }) => {
   return ReactDOM.createPortal(
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>{message}</h2>
+        <h2 className="text-black text-2xl">{message}</h2>
         <div className="modal-buttons">
           <button onClick={onConfirm} className="btn-confirm">
             Yes

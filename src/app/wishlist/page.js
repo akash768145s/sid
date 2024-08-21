@@ -59,34 +59,52 @@ const WishlistPage = () => {
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">My Wishlist</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {wishlist.length > 0 ? (
-          wishlist.map((item) => (
-            <div key={item._id} className="border p-4">
-              <Image
-                src={item.product.imageUrl}
-                alt={item.product.name}
-                width={500}
-                height={300}
-              />
-              <h2 className="text-xl font-bold">{item.product.name}</h2>
-              <p>{item.product.description}</p>
-              <p>₹{item.product.price}</p>
-              <p>{item.product.category}</p>
-              <p>Seller: {item.product.sellerName}</p>
-              <button
-                onClick={() => handleRemoveFromWishlist(item._id)}
-                className="mt-2 p-2 bg-red-500 text-white rounded"
+    <div className="bg-[#004aad] min-h-screen flex items-center justify-center">
+      <div className="bg-white max-w-6xl w-full shadow-lg rounded-lg p-6">
+        <h1 className="text-3xl font-semibold text-gray-800 mb-6">
+          My Wishlist
+        </h1>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {wishlist.length > 0 ? (
+            wishlist.map((item) => (
+              <div
+                key={item._id}
+                className="bg-white border rounded-lg shadow-md overflow-hidden"
               >
-                Remove from Wishlist
-              </button>
-            </div>
-          ))
-        ) : (
-          <p>No items in wishlist.</p>
-        )}
+                <Image
+                  src={item.product.imageUrl}
+                  alt={item.product.name}
+                  width={500}
+                  height={300}
+                  className="object-cover w-full h-48"
+                />
+                <div className="p-4">
+                  <h2 className="text-xl font-semibold text-gray-700">
+                    {item.product.name}
+                  </h2>
+                  <p className="text-gray-600 mt-2">
+                    {item.product.description}
+                  </p>
+                  <p className="text-gray-800 mt-2 font-semibold">
+                    ₹{item.product.price}
+                  </p>
+                  <p className="text-gray-500 mt-1 text-sm">
+                    {item.product.category}
+                  </p>
+
+                  <button
+                    onClick={() => handleRemoveFromWishlist(item._id)}
+                    className="mt-4 w-full py-2 bg-red-600 text-white font-semibold rounded hover:bg-red-700 transition"
+                  >
+                    Remove from Wishlist
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-600">No items in wishlist.</p>
+          )}
+        </div>
       </div>
     </div>
   );

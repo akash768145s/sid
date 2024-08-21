@@ -1,44 +1,72 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import Navbar from "@/components/Main/nav";
+import Image from "next/image";
+import Navbar from "./nav";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./main.css";
+import Modal from "../../../components/Model/Modal";
 
 const ProductPage = () => {
   const { data: session } = useSession();
-  
   const searchParams = useSearchParams();
+  const productId = searchParams.get("_id");
   const productName = searchParams.get("name");
   const productPrice = searchParams.get("price");
   const sellerEmail = searchParams.get("sellerEmail");
   const productDescription = searchParams.get("description");
   const productImageUrl = searchParams.get("imageUrl");
-  const [loading, setLoading] = useState(false);
-  const [isInWishlist, setIsInWishlist] = useState(false); // Wishlist state
+  const category = searchParams.get("category");
+  const sellerName = searchParams.get("sellerName"); // Ensure this is set correctly
 
-  const handleContactSeller = async () => {
+  const [loading, setLoading] = useState(false);
+  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    console.log("Seller Name:", sellerName); // Debug log
+    if (productId) {
+      fetchWishlistStatus();
+    }
+  }, [productId, sellerName]); // Add sellerName to dependencies
+
+  const fetchWishlistStatus = async () => {
+    try {
+      const response = await fetch("/api/wishlist");
+      if (response.ok) {
+        const data = await response.json();
+        const isProductInWishlist = data.some((item) => item._id === productId);
+        setIsInWishlist(isProductInWishlist);
+      } else {
+        console.error("Failed to fetch wishlist:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching wishlist status:", error);
+    }
+  };
+
+  const handleConfirmModal = async () => {
     setLoading(true);
 
     const subject = encodeURIComponent(`Inquiry About ${productName}`);
     const body = encodeURIComponent(`
-  Dear Seller,
-  
-  I am interested in ${productName}. Could you provide more details or suggest a time to discuss?
-  
-  Thank you!
-  
-  Best regards,
-  ${session?.user?.name}
-  
-  Note: You can continue the conversation by replying to this email.
-  
-  For any issues, contact our team.
-  
-  Best regards,
-  Team SID`);
+      Dear ${sellerName || "Seller"},
+      
+      I am interested in ${productName} listed on SellITDUDE. Could you provide more details or suggest a time to discuss?
+      
+      Thank you!
+      
+      Best regards,
+      ${session?.user?.name || "Buyer"}
+      
+      Note: You can continue the conversation by replying to this email.
+      
+      For any issues, contact our team.
+      
+      Best regards,
+      Team SID`);
 
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${sellerEmail}&su=${subject}&body=${body}`;
 
@@ -64,37 +92,121 @@ const ProductPage = () => {
       alert("Error contacting seller.");
     } finally {
       setLoading(false);
+      setIsModalOpen(false);
     }
   };
 
-  const handleAddToCart = () => {
-    toast.success(`${productName} added to cart!`, {
-      position: "bottom-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-    });
-  };
+  const handleAddToWishlist = async (product) => {
+    try {
+      const response = await fetch("/api/wishlist", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ product, sellerName }), // Pass sellerName here
+      });
 
-  // Wishlist Toggle Functionality
-  const handleToggleWishlist = () => {
-    setIsInWishlist((prev) => !prev);
-    toast.info(
-      isInWishlist
-        ? `${productName} removed from wishlist`
-        : `${productName} added to wishlist`,
-      {
+      const responseData = await response.json();
+
+      if (response.ok) {
+        toast.success(responseData.message, {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      } else {
+        toast.error(responseData.message, {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error adding product to wishlist:", error);
+      toast.error("Error adding product to wishlist.", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
-      }
-    );
+      });
+    }
   };
+
+  const handleRemoveFromWishlist = async (productId) => {
+    try {
+      const response = await fetch(`/api/wishlist/${productId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error(
+          "Error removing product from wishlist:",
+          errorData.message
+        );
+        return;
+      }
+
+      const responseData = await response.json();
+      console.log(responseData.message);
+
+      setIsInWishlist(false);
+      toast.success(responseData.message, {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (error) {
+      console.error("Error removing product from wishlist:", error);
+      toast.error("Error removing product from wishlist.", {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
+  const handleToggleWishlist = async () => {
+    console.log("Button clicked"); // Debug log
+
+    if (productId) {
+      if (isInWishlist) {
+        console.log("Removing from wishlist"); // Debug log
+        await handleRemoveFromWishlist(productId);
+      } else {
+        console.log("Adding to wishlist"); // Debug log
+        await handleAddToWishlist({
+          id: productId,
+          name: productName,
+          price: productPrice,
+          sellerEmail,
+          description: productDescription,
+          imageUrl: productImageUrl,
+          category,
+        });
+      }
+      setIsInWishlist((prev) => !prev);
+      console.log("Updated wishlist status:", !isInWishlist); // Debug log
+    } else {
+      console.error("Product ID is missing");
+    }
+  };
+
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
     <>
@@ -103,7 +215,15 @@ const ProductPage = () => {
         <section className="main">
           <div className="default gallery">
             <div className="main-img">
-              <img className="active" src={productImageUrl} alt={productName} />
+              <Image
+                className="active"
+                src={productImageUrl}
+                alt={productName}
+                width={500}
+                height={500}
+                layout="responsive"
+                objectFit="contain"
+              />
             </div>
           </div>
 
@@ -153,10 +273,14 @@ const ProductPage = () => {
                     />
                   </svg>
                 </span>
-                <img
+                <Image
                   className="active"
                   src={productImageUrl}
                   alt={productName}
+                  width={500}
+                  height={500}
+                  layout="responsive"
+                  objectFit="contain"
                 />
               </div>
             </div>
@@ -164,8 +288,18 @@ const ProductPage = () => {
 
           <div className="content">
             <div className="product-container">
-              <h2 className="product-name">{productName}</h2>
-              <div className="wishlist-button">
+              <div className="flex flex-col">
+                <h2 className="product-name text-2xl font-semibold">
+                  {productName}
+                </h2>
+                <h3 className="product-category text-sm text-gray-500 italic -mt-10">
+                  {category}
+                </h3>
+                <p className="product-seller text-sm text-gray-500 italic mt-2">
+                  Seller: {sellerName || "Unknown"}
+                </p>
+              </div>
+              <div className="wishlist-button mt-2">
                 <button
                   className={`wishlist-toggle ${
                     isInWishlist ? "in-wishlist" : ""
@@ -178,8 +312,8 @@ const ProductPage = () => {
                     height="24"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
-                    fill={isInWishlist ? "white" : "none"} // Fill color based on wishlist state
-                    stroke={isInWishlist ? "white" : "currentColor"} // Stroke color based on wishlist state
+                    fill={isInWishlist ? "white" : "none"}
+                    stroke={isInWishlist ? "white" : "currentColor"}
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -204,14 +338,18 @@ const ProductPage = () => {
             <div className="add-to-cart-container">
               <button
                 className="add-to-cart"
-                onClick={handleContactSeller}
-                disabled={loading}
+                onClick={() => setIsModalOpen(true)}
               >
-                <span>
-                  {loading ? "Contacting Seller..." : "Contact Seller"}
-                </span>
+                <span>Contact Seller</span>
               </button>
             </div>
+
+            <Modal
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              onConfirm={handleConfirmModal}
+              message="Do you want to chat with the seller?"
+            />
           </div>
         </section>
         <ToastContainer />

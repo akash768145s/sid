@@ -1,7 +1,8 @@
 import React from "react";
 import connect from "@/utils/db";
 import Product from "@/models/Product";
-import ProductList from "./ProductList"; // Import the Client Component
+import ProductList from "./ProductList";
+import Navbar from "./nav"; // Import the Client Component
 
 const fetchProducts = async () => {
   try {
@@ -18,10 +19,15 @@ const ProductsPage = async () => {
   const products = await fetchProducts();
 
   return (
-    <div className="p-24">
-      <h1 className="text-2xl font-bold mb-4">Product Listings</h1>
-      <ProductList products={products} /> {/* Pass data to Client Component */}
-    </div>
+    <>
+      <Navbar />
+
+      <div className="p-24 bg-[#004aad] -mt-20 w">
+        <h1 className="text-2xl text-white font-bold mb-4">Product Listings</h1>
+        <ProductList products={products} />
+      </div>
+
+    </>
   );
 };
 
