@@ -19,18 +19,11 @@ const ProductPage = () => {
   const productDescription = searchParams.get("description");
   const productImageUrl = searchParams.get("imageUrl");
   const category = searchParams.get("category");
-  const sellerName = searchParams.get("sellerName"); // Ensure this is set correctly
+  const sellerName = searchParams.get("sellerName");
 
   const [loading, setLoading] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    console.log("Seller Name:", sellerName); // Debug log
-    if (productId) {
-      fetchWishlistStatus();
-    }
-  }, [productId, sellerName]); // Add sellerName to dependencies
 
   const fetchWishlistStatus = async () => {
     try {
@@ -46,6 +39,13 @@ const ProductPage = () => {
       console.error("Error fetching wishlist status:", error);
     }
   };
+
+  useEffect(() => {
+    console.log("Seller Name:", sellerName); // Debug log
+    if (productId) {
+      fetchWishlistStatus();
+    }
+  }, [productId, sellerName, fetchWishlistStatus]); // Include fetchWishlistStatus
 
   const handleConfirmModal = async () => {
     setLoading(true);
@@ -103,7 +103,7 @@ const ProductPage = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ product, sellerName }), // Pass sellerName here
+        body: JSON.stringify({ product, sellerName }),
       });
 
       const responseData = await response.json();

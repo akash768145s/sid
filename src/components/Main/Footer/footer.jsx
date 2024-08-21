@@ -1,5 +1,6 @@
 "use client";
 import { IoLocationSharp } from "react-icons/io5";
+
 const Footer = () => {
   return (
     <>
@@ -12,7 +13,7 @@ const Footer = () => {
                 Get Started
               </div>
               <h1 className="w-full relative text-71xl leading-[100px] font-bold z-[2] mq800:text-[45px] mq800:leading-[60px] mq450:text-[27px] mq450:leading-[40px]">
-                Get in touch with us. We're here to assist you.
+                Get in touch with us. We&apos;re here to assist you.
               </h1>
             </div>
             <div className="w-full flex flex-col items-start justify-start gap-[25px] text-3xl">
