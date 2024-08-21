@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { useCallback } from "react";
 import Navbar from "./nav";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
@@ -25,7 +26,7 @@ const ProductPage = () => {
   const [isInWishlist, setIsInWishlist] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchWishlistStatus = async () => {
+  const fetchWishlistStatus = useCallback(async () => {
     try {
       const response = await fetch("/api/wishlist");
       if (response.ok) {
@@ -38,7 +39,14 @@ const ProductPage = () => {
     } catch (error) {
       console.error("Error fetching wishlist status:", error);
     }
-  };
+  }, [productId]);
+
+  useEffect(() => {
+    console.log("Seller Name:", sellerName); // Debug log
+    if (productId) {
+      fetchWishlistStatus();
+    }
+  }, [productId, sellerName, fetchWishlistStatus]);
 
   useEffect(() => {
     console.log("Seller Name:", sellerName); // Debug log
