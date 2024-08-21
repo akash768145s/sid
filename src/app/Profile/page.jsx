@@ -129,54 +129,57 @@ const Profile = () => {
             </AnimatePresence>
           </LazyMotion>
 
+          <style jsx>
+            {`
+              @media (max-width: 640px) {
+                .product-container {
+                  flex-direction: column;
+                  gap: 1rem; /* Space between products in column layout */
+                }
+              }
+            `}
+          </style>
+
           <div className="p-4">
-            <h2 className="text-xl font-semibold mb-4">Your Products</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {userProducts.length > 0 ? (
-                userProducts.map((product) => (
-                  <div
-                    key={product._id}
-                    className="p-4 bg-white shadow-md rounded-lg"
-                  >
-                    <Image
-                      src={product.imageUrl}
-                      alt={product.name}
-                      width={150}
-                      height={150}
-                      className="rounded mb-4"
-                    />
-                    <div className="text-lg font-semibold text-gray-800">
-                      {product.name}
-                    </div>
-                    <div className="text-md font-medium text-blue-600 mt-1">
-                      {product.category}
-                    </div>
-                    <div className="text-sm text-gray-600 mt-2">
-                      Seller:{" "}
-                      <span className="font-medium text-gray-800">
-                        {product.sellerName}
-                      </span>
-                    </div>
-                    <p className="text-justify text-gray-700 mt-3">
-                      {product.description.length > 100
-                        ? `${product.description.slice(0, 100)}...`
-                        : product.description}
-                    </p>
-                    <div className="flex justify-between mt-4">
-                      <button
-                        className="bg-red-500 text-white px-4 py-2 rounded"
-                        onClick={() => handleOpenModal(product)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>No products found.</p>
-              )}
+  <h2 className="text-xl font-semibold mb-4">Your Products</h2>
+  <div className="overflow-x-auto">
+    <div className="flex flex-row flex-wrap gap-4 sm:flex-col product-container">
+      {userProducts.length > 0 ? (
+        userProducts.map((product) => (
+          <div
+            key={product._id}
+            className="w-64 p-4 bg-white shadow-md rounded-lg flex-none"
+          >
+            <Image
+              src={product.imageUrl}
+              alt={product.name}
+              width={150}
+              height={150}
+              className="rounded mb-4"
+            />
+            <div className="text-lg font-semibold text-gray-800">
+              {product.name}
+            </div>
+            <div className="text-md font-medium text-blue-600 mt-1">
+              {product.category}
+            </div>
+            <div className="flex justify-between mt-4">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded"
+                onClick={() => handleOpenModal(product)}
+              >
+                Delete
+              </button>
             </div>
           </div>
+        ))
+      ) : (
+        <p>No products found.</p>
+      )}
+    </div>
+  </div>
+</div>
+
 
           <Footer />
 
