@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import GoogleButton from "@/components/GoogleButton"; 
+import GoogleButton from "@/components/googlebutton";
 import { useSession, signOut } from "next-auth/react";
 import ProductCard from "@/components/priceCard";
 import Image from "next/image";
@@ -16,10 +16,12 @@ const HomePage = () => {
       {session ? (
         <>
           <div className="text-center">
-            <img
+            <Image
               src={session.user.image}
               alt="Profile Picture"
-              className="w-24 h-24 rounded-full mb-4"
+              width={96} // Equivalent to 24 * 4 for consistency with TailwindCSS
+              height={96} // Equivalent to 24 * 4 for consistency with TailwindCSS
+              className="rounded-full mb-4"
             />
             <p className="text-xl font-semibold">
               Profile Name: {session.user.name}
