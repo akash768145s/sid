@@ -37,7 +37,7 @@ const Navbar2 = () => {
             </svg>
           </label>
           <Link
-            href="/"
+            href="/display"
             className="nav-link"
             style={{ marginRight: "100px", marginTop: "10px" }}
           >

@@ -32,13 +32,13 @@ export const authOptions = {
         token.email = user.email;
       }
       return token;
-    }
+    },
   },
   pages: {
     signIn: "/auth/signin",
   },
 };
 
+// The correct way to export the handler for Next.js API routes
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };
