@@ -4,9 +4,15 @@ import GoogleButton from "@/components/googlebutton";
 import { useSession, signOut } from "next-auth/react";
 import ProductCard from "@/components/priceCard";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const HomePage = () => {
   const { data: session } = useSession();
+  const router = useRouter();
+
+  const handleGoToDashboard = () => {
+    router.push("/"); // Adjust the path to your dashboard route
+  };
 
   return (
     <div
@@ -16,27 +22,27 @@ const HomePage = () => {
       {session ? (
         <>
           <div className="text-center">
-            <Image
-              src={session.user.image}
-              alt="Profile Picture"
-              width={96} // Equivalent to 24 * 4 for consistency with TailwindCSS
-              height={96} // Equivalent to 24 * 4 for consistency with TailwindCSS
-              className="rounded-full mb-4"
-            />
-            <p className="text-xl font-semibold">
-              Profile Name: {session.user.name}
-            </p>
-            <p className="text-lg text-gray-700">
-              Digital ID: {session.user.digitalId}
-            </p>
+          <Image
+            src="/Logo2.png" // Update the path to your logo image
+            alt="Logo"
+            width={175} // Set the desired width
+            height={175} // Set the desired height
+            className="mb-4"
+            style={{ marginLeft: "20px" }} // Adjust the margin to move the image to the right
+          />
+          <h1
+            className="font-semibold text-white mb-2"
+            style={{ fontSize: "2rem", marginTop: "-35px" }} // Move the tagline up slightly
+          >
+            Sell it Dude!
+          </h1>
             <button
-              onClick={() => signOut()}
-              className="mt-4 px-6 py-2 bg-red-600 text-white font-bold rounded hover:bg-red-700 transition"
+              onClick={handleGoToDashboard}
+              className="px-4 -mr-3 py-2 bg-[#004aad] text-white rounded hover:bg-[#004aad] transition-colors duration-300"
             >
-              Sign out
+              Go to Dashboard
             </button>
           </div>
-          <ProductCard />
         </>
       ) : (
         <div className="text-center">

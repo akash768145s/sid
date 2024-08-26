@@ -43,3 +43,5 @@ const handler = NextAuth(authOptions);
 
 // The correct way to export in Next.js API routes with the new app structure
 export { handler as GET, handler as POST };
+
+
