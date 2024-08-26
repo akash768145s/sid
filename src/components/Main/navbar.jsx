@@ -1,11 +1,15 @@
 "use client";
-import SearchInput from "@/components/searchbar";
+
 import Image from "next/image";
 import phoneIcon from "../../../public/sign-out.png";
+import backIcon from "../../../public/wishli.png";
 import { signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
   const { data: session } = useSession();
+  const handleGoWishlist = () => {
+    router.push("/wishlist");
+  };
 
   return (
     <>
@@ -95,7 +99,17 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <div className="navButtons">
-          <SearchInput />
+          <button className="contactButton" onClick={handleGoWishlist}>
+            <Image
+              src={backIcon}
+              alt="Wishlist"
+              width={30}
+              height={30}
+              className="mr-2"
+            />
+            Wishlist
+          </button>
+
           <button
             className="contactButton"
             onClick={() => (session ? signOut() : alert("Contact Us"))}
