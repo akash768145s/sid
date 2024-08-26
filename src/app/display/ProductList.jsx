@@ -150,10 +150,12 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
                   <h4 className="mr-1 text-white">&#x20b9; {product.price}</h4>
                 </div>
                 <div className="d-flex flex-column h-full mt-4">
-                  {isSeller && (
+                  {(session?.user?.name === product.sellerName ||
+                    session?.user?.email ===
+                      "sakthimuruganakash@gmail.com") && (
                     <button
                       className="btn btn-danger btn-sm mb-2"
-                      onClick={handleDelete}
+                      onClick={() => handleDelete(product)}
                     >
                       Delete
                     </button>
@@ -166,17 +168,20 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
                       Add to Wishlist
                     </button>
                   )}
-                  <button
-                    className="bg-blue-500 btn btn-primary btn-sm"
-                    onClick={() => handleNavigateToProductPage(product)}
-                  >
-                    View Item
-                  </button>
+                  {!isSeller && (
+                    <button
+                      className="bg-blue-500 btn btn-primary btn-sm"
+                      onClick={() => handleNavigateToProductPage(product)}
+                    >
+                      View Item
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
           </div>
         </div>
+
         <Modal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
