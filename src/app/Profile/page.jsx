@@ -1,8 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { getUserProducts } from "../../utils/getUserProducts"; // Adjust path as necessary
-import Footer from "./footer";
+import { getUserProducts } from "../../utils/getUserProducts";
 import Navbar from "./navbar";
 import { MdEmail } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
@@ -141,54 +140,55 @@ const Profile = () => {
           </style>
 
           <div className="p-4">
-  <h2 className="text-xl font-semibold mb-4">Your Products</h2>
-  <div className="overflow-x-auto">
-    <div className="flex flex-row flex-wrap gap-4 sm:flex-col product-container">
-      {userProducts.length > 0 ? (
-        userProducts.map((product) => (
-          <div
-            key={product._id}
-            className="w-64 p-4 bg-white shadow-md rounded-lg flex-none"
-          >
-            <Image
-              src={product.imageUrl}
-              alt={product.name}
-              width={150}
-              height={150}
-              className="rounded mb-4"
-            />
-            <div className="text-lg font-semibold text-gray-800">
-              {product.name}
-            </div>
-            <div className="text-md font-medium text-blue-600 mt-1">
-              {product.category}
-            </div>
-            <div className="flex justify-between mt-4">
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded"
-                onClick={() => handleOpenModal(product)}
-              >
-                Delete
-              </button>
+            <h2 className="text-xl font-semibold mb-4">Your Products</h2>
+            <div className="overflow-x-auto">
+              <div className="flex flex-row flex-wrap gap-4 sm:flex-col product-container">
+                {userProducts.length > 0 ? (
+                  userProducts.map((product) => (
+                    <div
+                      key={product._id}
+                      className="w-64 p-4 bg-white shadow-md rounded-lg flex-none"
+                    >
+                      <Image
+                        src={product.imageUrl}
+                        alt={product.name}
+                        width={150}
+                        height={150}
+                        className="rounded mb-4"
+                      />
+                      <div className="text-lg font-semibold text-gray-800">
+                        {product.name}
+                      </div>
+                      <div className="text-md font-medium text-blue-600 mt-1">
+                        {product.category}
+                      </div>
+                      <div className="flex justify-between mt-4">
+                        <button
+                          className="bg-red-500 text-white px-4 py-2 rounded"
+                          onClick={() => handleOpenModal(product)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>No products found.</p>
+                )}
+              </div>
             </div>
           </div>
-        ))
-      ) : (
-        <p>No products found.</p>
-      )}
-    </div>
-  </div>
-</div>
-
-
-          <Footer />
-
           <Modal
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             onConfirm={handleConfirmModal}
             message="Do you want to delete this product?"
           />
+          <footer className="bg-[#004aad] text-white py-6 mt-auto">
+            <div className="container mx-auto flex flex-col md:flex-row justify-between items-center px-4">
+
+            </div>
+          </footer>
         </>
       ) : (
         <div className="w-full h-screen bg-white flex items-center justify-center">
