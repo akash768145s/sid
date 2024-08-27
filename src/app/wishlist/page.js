@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import Navbar from "./nav";
 
 const WishlistPage = () => {
   const { data: session, status } = useSession();
@@ -59,7 +60,7 @@ const WishlistPage = () => {
   }
 
   return (
-    <div className="bg-[#004aad] min-h-screen flex items-center justify-center">
+    <><Navbar /><div className="bg-[#004aad] min-h-screen flex items-center justify-center">
       <div className="bg-white max-w-6xl w-full shadow-lg rounded-lg p-6">
         <h1 className="text-3xl font-semibold text-gray-800 mb-6">
           My Wishlist
@@ -76,8 +77,7 @@ const WishlistPage = () => {
                   alt={item.product.name}
                   width={500}
                   height={300}
-                  className="object-cover w-full h-48"
-                />
+                  className="object-cover w-full h-48" />
                 <div className="p-4">
                   <h2 className="text-xl font-semibold text-gray-700">
                     {item.product.name}
@@ -106,7 +106,7 @@ const WishlistPage = () => {
           )}
         </div>
       </div>
-    </div>
+    </div></>
   );
 };
 
