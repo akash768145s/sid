@@ -4,9 +4,11 @@ import Image from "next/image";
 import phoneIcon from "../../../public/sign-out.png";
 import backIcon from "../../../public/wishli.png";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   const handleGoWishlist = () => {
     router.push("/wishlist");
   };
