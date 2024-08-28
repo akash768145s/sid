@@ -91,6 +91,7 @@ const ProductPage = () => {
           sellerName,
           productName,
           sellerEmail,
+          buyerEmail: session?.user?.email, // Send the buyer's email
         }),
         headers: {
           "Content-Type": "application/json",
@@ -113,6 +114,7 @@ const ProductPage = () => {
       setIsModalOpen(false);
     }
   };
+  
   
 
   const handleAddToWishlist = async (product) => {
