@@ -1,3 +1,4 @@
+// src/app/product/[id]/page.jsx
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
@@ -82,7 +83,9 @@ const ProductPage = () => {
       const userEmail = session?.user?.email;
       const response = await fetch("/api/contact-seller", {
         method: "POST",
-        body: JSON.stringify({ userEmail }),
+        body: JSON.stringify({
+          sellerName, productName,sellerEmail
+        }),
         headers: {
           "Content-Type": "application/json",
         },
