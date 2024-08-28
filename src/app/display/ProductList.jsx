@@ -1,7 +1,8 @@
+// src/app/display/ProductList.jsx
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import "./1.css";
 import "./2.css";
@@ -62,7 +63,6 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
   };
 
   const handleConfirmModal = async () => {
-    // Prepare the email content
     setLoading(true);
     const subject = encodeURIComponent(`Inquiry About [${product.name}]`);
     const body = encodeURIComponent(`
@@ -99,10 +99,8 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Open Gmail with the prepared email content
         window.location.href = gmailUrl;
       } else {
-        // Handle API response errors
         alert(data.message || "Failed to contact seller.");
       }
     } catch (error) {
@@ -195,6 +193,8 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
 };
 
 const ProductList = ({ products = [] }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [productList, setProductList] = useState(products);
@@ -203,14 +203,23 @@ const ProductList = ({ products = [] }) => {
 
   useEffect(() => {
     setIsMounted(true);
-  }, []);
+    setProductList(products);
+  }, [products]);
+
+  useEffect(() => {
+    const category = searchParams.get("category") || "All";
+    setSelectedCategory(category);
+  }, [searchParams]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
 
   const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
+    const newCategory = event.target.value;
+    setSelectedCategory(newCategory);
+
+    router.push(`/display?category=${encodeURIComponent(newCategory)}`);
   };
 
   const handleDeleteProduct = async (id) => {
@@ -273,8 +282,8 @@ const ProductList = ({ products = [] }) => {
         });
       }
     } catch (error) {
-      console.error("Error adding product to wishlist:", error);
-      toast.error("Error adding product to wishlist.", {
+      console.error("Error adding to wishlist:", error);
+      toast.error("Error adding to wishlist.", {
         position: "bottom-right",
         autoClose: 3000,
         hideProgressBar: true,
@@ -287,58 +296,54 @@ const ProductList = ({ products = [] }) => {
   };
 
   const filteredProducts = productList.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
     const matchesCategory =
       selectedCategory === "All" || product.category === selectedCategory;
+    const matchesSearch =
+      searchQuery === "" ||
+      product.name.toLowerCase().includes(searchQuery.toLowerCase());
 
-    return matchesSearch && matchesCategory;
+    return matchesCategory && matchesSearch;
   });
 
-  if (!isMounted) {
-    return null;
-  }
-
   return (
-    <div className="bg-[#004aad]">
-      {message && <div className="alert alert-info">{message}</div>}
-      <div className="mb-4 d-flex flex-column md:flex-row gap-4">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={handleSearchChange}
-          placeholder="Search by product name"
-          className="p-2 border border-gray-300 rounded w-full md:w-1/2"
-        />
-        <select
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          className="p-2 border border-gray-300 rounded w-full md:w-1/2"
-        >
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+    <>
+      <div className="mb-3 bg-[#004aad] text-white p-3 rounded">
+        <div className="container">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            placeholder="Search products..."
+            className="form-control mb-2"
+          />
+          <select
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            className="form-control"
+          >
+            {categories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
+      {filteredProducts.length > 0 ? (
+        <div className="container">
+          {filteredProducts.map((product) => (
             <ProductCard
               key={product._id}
               product={product}
               onDelete={handleDeleteProduct}
               onAddToWishlist={handleAddToWishlist}
-              className="mb-[-10px]" // Negative margin to reduce gap
             />
-          ))
-        ) : (
-          <p>No products found.</p>
-        )}
-      </div>
-    </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-center mt-5 text-white">No products found.</p>
+      )}
+    </>
   );
 };
 

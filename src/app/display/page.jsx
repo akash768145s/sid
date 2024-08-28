@@ -1,8 +1,8 @@
+// src/app/display/page.jsx
 import React from "react";
 import connect from "@/utils/db";
 import Product from "@/models/Product";
-import ProductList from "./ProductList";
-import Navbar from "./nav"; // Import the Client Component
+import ClientProductsPage from "./ClientProductsPage"; // Import the client-side component
 
 const fetchProducts = async () => {
   try {
@@ -18,17 +18,8 @@ const fetchProducts = async () => {
 const ProductsPage = async () => {
   const products = await fetchProducts();
 
-  return (
-    <>
-      <Navbar />
-
-      <div className="p-24 bg-[#004aad] -mt-20 w">
-        <h1 className="text-2xl text-white font-bold mb-4">Product Listings</h1>
-        <ProductList products={products} />
-      </div>
-
-    </>
-  );
+  // Render the client-side component and pass products as props
+  return <ClientProductsPage products={products} />;
 };
 
 export default ProductsPage;

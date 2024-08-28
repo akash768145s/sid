@@ -25,7 +25,7 @@ const Footer = () => {
                 <div className="w-full flex flex-wrap items-start justify-between gap-[20px]">
                   <div className="flex flex-col items-start justify-start pt-[26px]">
                     <div className="relative font-semibold z-[2] mq450:text-lg">
-                      sellitdude@gmail.com
+                      sellitdude.ssn@gmail.com
                     </div>
                   </div>
                   <div className="w-[194.9px] flex flex-row items-start justify-end gap-[20px] ml-auto">

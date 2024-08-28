@@ -62,7 +62,7 @@ const ProductPage = () => {
     const body = encodeURIComponent(`
       Dear ${sellerName || "Seller"},
       
-      I am interested in ${productName} listed on SellITDUDE. Could you provide more details or suggest a time to discuss?
+      I am interested in ${productName} listed on SellItDude!. Could you provide more details or suggest a time to discuss?
       
       Thank you!
       
