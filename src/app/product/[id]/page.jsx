@@ -58,7 +58,7 @@ const ProductPage = () => {
 
   const handleConfirmModal = async () => {
     setLoading(true);
-
+  
     const subject = encodeURIComponent(`Inquiry About ${productName}`);
     const body = encodeURIComponent(`
       Dear ${sellerName || "Seller"},
@@ -76,25 +76,32 @@ const ProductPage = () => {
       
       Best regards,
       Team SID`);
-
+  
+    // Use window.matchMedia to check for mobile screen size
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  
+    // Define the URLs based on the device type
+    const mailtoUrl = `mailto:${sellerEmail}?subject=${subject}&body=${body}`;
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${sellerEmail}&su=${subject}&body=${body}`;
-
+  
     try {
-      const userEmail = session?.user?.email;
       const response = await fetch("/api/contact-seller", {
         method: "POST",
         body: JSON.stringify({
-          sellerName, productName,sellerEmail
+          sellerName,
+          productName,
+          sellerEmail,
         }),
         headers: {
           "Content-Type": "application/json",
         },
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
-        window.location.href = gmailUrl;
+        // Redirect to appropriate URL based on device type
+        window.location.href = isMobile ? mailtoUrl : gmailUrl;
       } else {
         alert(data.message || "Failed to contact seller.");
       }
@@ -106,6 +113,7 @@ const ProductPage = () => {
       setIsModalOpen(false);
     }
   };
+  
 
   const handleAddToWishlist = async (product) => {
     try {
