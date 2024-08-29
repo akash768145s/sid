@@ -153,7 +153,7 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
                       "sakthimuruganakash@gmail.com") && (
                     <button
                       className="btn btn-danger btn-sm mb-2"
-                      onClick={() => handleDelete(product)}
+                      onClick={handleDelete}
                     >
                       Delete
                     </button>

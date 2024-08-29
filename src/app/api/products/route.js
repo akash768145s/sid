@@ -10,7 +10,7 @@ export async function POST(request) {
 
   const { name, description, price, category, imageUrl } = await request.json();
 
-  // Get the token or user context to extract the seller's name and email
+
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
