@@ -1,13 +1,15 @@
-// src/app/display/page.jsx
 import React from "react";
-import connect from "@/utils/db";
-import Product from "@/models/Product";
-import ClientProductsPage from "./ClientProductsPage"; // Import the client-side component
+import ClientProductsPage from "./ClientProductsPage";
 
 const fetchProducts = async () => {
   try {
-    await connect();
-    const products = await Product.find({}).lean();
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/fetch`
+    );
+    if (!response.ok) {
+      throw new Error("Failed to fetch products");
+    }
+    const products = await response.json();
     return products;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -17,8 +19,6 @@ const fetchProducts = async () => {
 
 const ProductsPage = async () => {
   const products = await fetchProducts();
-
-  // Render the client-side component and pass products as props
   return <ClientProductsPage products={products} />;
 };
 
