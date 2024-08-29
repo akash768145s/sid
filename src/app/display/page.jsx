@@ -1,14 +1,24 @@
+// src/app/display/page.jsx
+
 import React from "react";
 import ClientProductsPage from "./ClientProductsPage";
 
 const fetchProducts = async () => {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/fetch`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/fetch`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
+
     if (!response.ok) {
       throw new Error("Failed to fetch products");
     }
+
     const products = await response.json();
     return products;
   } catch (error) {
