@@ -9,7 +9,6 @@ import "./2.css";
 import "./3.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Modal from "../../components/Model/Modal";
 
 const categories = [
   "All",
@@ -22,8 +21,6 @@ const categories = [
 const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
   const { data: session } = useSession();
   const isSeller = session?.user?.email === product.sellerEmail;
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleNavigateToProductPage = (product) => {
@@ -54,63 +51,7 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
     }
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleConfirmModal = async () => {
-    setLoading(true);
-    const subject = encodeURIComponent(`Inquiry About [${product.name}]`);
-    const body = encodeURIComponent(`
-  Dear ${product.sellerName},
-  
-  I am interested in the ${
-    product.name
-  } listed on SellITDUDE. Could you provide more details or suggest a time to discuss?
-  
-  Thank you!
-  
-  Best regards,
-  ${session?.user?.name || "Buyer"}
-  
-  Note: You can continue the conversation by replying to this email.
-  
-  For any issues, contact our team.
-  
-  Best regards,
-  Team SID`);
-
-    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${product.sellerEmail}&su=${subject}&body=${body}`;
-
-    try {
-      const userEmail = session?.user?.email;
-      const response = await fetch("/api/contact-seller", {
-        method: "POST",
-        body: JSON.stringify({ userEmail }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        window.location.href = gmailUrl;
-      } else {
-        alert(data.message || "Failed to contact seller.");
-      }
-    } catch (error) {
-      console.error("Error contacting seller:", error);
-      alert("Error contacting seller.");
-    } finally {
-      setLoading(false);
-      setIsModalOpen(false);
-    }
-  };
 
   return (
     <div className="bg-[#004aad] py-5 mb-[-140px] ">
@@ -180,12 +121,6 @@ const ProductCard = ({ product, onDelete, onAddToWishlist }) => {
           </div>
         </div>
 
-        <Modal
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          onConfirm={handleConfirmModal}
-          message="Do you want to chat with the seller?"
-        />
         <ToastContainer />
       </div>
     </div>
